@@ -1,0 +1,22 @@
+glob:bin
+glob:debug
+glob:*.vsscc
+glob:TestResults
+glob:obj
+glob:*.zip
+glob:*.vssscc
+glob:*.testrunconfig
+glob:*.user
+glob:_ReSharper*
+glob:_UpgradeReport*
+glob:*ReSharper*
+glob:*csproj.user
+glob:*.suo
+glob:Output
+glob:*.vsmdi
+glob:*.pdb
+glob:*.log
+glob:*.nupkg
+glob:*.orig
+syntax: glob
+packages
