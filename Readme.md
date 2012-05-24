@@ -1,5 +1,5 @@
 # Uri Templates #
 
-.Net implementation of the [URI Template Spec](http://tools.ietf.org/html/draft-gregorio-uritemplate-08).
+.Net implementation of the [URI Template Spec RFC6570](http://tools.ietf.org/html/rfc6570).
 
-See tests for example usages.
+Library implements Level 4 compliance and is tested against test cases from [UriTemplate test suite](https://github.com/uri-templates/uritemplate-test).
