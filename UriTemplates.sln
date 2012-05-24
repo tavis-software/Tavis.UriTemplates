@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplates", "UriTemplates\UriTemplates.csproj", "{F571E020-AB02-4284-BE11-033D6E92EB66}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplates", "src\UriTemplates\UriTemplates.csproj", "{F571E020-AB02-4284-BE11-033D6E92EB66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplateTests", "UriTemplateTests\UriTemplateTests.csproj", "{5B4A94DF-2CBB-41BF-AAB3-F7991F0C6A4B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplateTests", "src\UriTemplateTests\UriTemplateTests.csproj", "{5B4A94DF-2CBB-41BF-AAB3-F7991F0C6A4B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E2DC841E-1899-4B3E-B012-303943A6D52C}"
 	ProjectSection(SolutionItems) = preProject
