@@ -1,0 +1,35 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="default">
+  <PropertyGroup>
+    <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
+    <Configuration Condition="'$(Configuration)'==''" >Release</Configuration>
+    <BuildDir>$(BaseDir)\build</BuildDir>
+    <PackageDir>$(BuildDir)\Packages</PackageDir>
+    <SolutionFile>$(BaseDir)\UriTemplates.sln</SolutionFile>
+  	<Project>UriTemplates</Project>
+	<OutputDir>$(BaseDir)\src\$(Project)\bin\$(Configuration)</OutputDir>
+  </PropertyGroup>
+ 
+  
+  <Target Name="default" DependsOnTargets="Compile; Package" />
+ 
+  <Target Name="Compile">
+    <MSBuild Projects="$(SolutionFile)" Properties="Configuration=$(Configuration);OutputPath=bin\$(Configuration)\NET40;BuildFramework="  />
+	<MSBuild Projects="$(SolutionFile)" Properties="Configuration=$(Configuration);OutputPath=bin\$(Configuration)\NET35;BuildFramework=NET35"  />
+  </Target>
+ 
+  <Target Name="Package">
+    <ItemGroup>
+      <MainBinaries Include="$(OutputDir)\**\Tavis.URITemplates.dll" />
+    </ItemGroup>
+ 
+    <!-- First copy the nuspec template files to the package dir -->
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\Tavis.$(Project).nuspec" DestinationFolder="$(PackageDir)\temp\$(Project)" />
+ 
+    <!-- Copy the source files to the package dir -->
+    <Copy SourceFiles="@(MainBinaries)" DestinationFolder="$(PackageDir)\temp\$(Project)\lib\%(RecursiveDir)" />
+ 
+
+    <Exec WorkingDirectory="$(BuildDir)\Packages" 
+          Command="$(BaseDir)\lib\nuget\nuget.exe pack $(PackageDir)\temp\$(Project)\Tavis.$(Project).nuspec" />
+  </Target>
+</Project>
