@@ -2,14 +2,17 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Tavis.UriTemplates</id>
-    <version>0.1.2</version>
+    <version>0.1.2-beta</version>
     <authors>Darrel Miller</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<title>URI Template resolution library</title>
     <description>Implementation of RFC 6570</description>
     <tags>http</tags>
-	<releaseNotes>Added support for .net 4.5</releaseNotes>
+	<releaseNotes>Added portable version</releaseNotes>
 	<projectUrl>https://github.com/tavis-software/UriTemplates</projectUrl>
 	</metadata>
- 
+    <files>
+        <file src="Packages\temp\UriTemplates\lib\Net35\*.*" target="lib\Net35" />
+        <file src="Packages\temp\UriTemplates\lib\portable\*.*" target="lib\Portable-Net40+WinRT45+WP71+sl4" />
+    </files>
 </package>

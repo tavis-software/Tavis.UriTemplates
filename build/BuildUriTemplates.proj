@@ -15,24 +15,14 @@
   <Target Name="default" DependsOnTargets="Compile; Package" />
  
   <Target Name="Compile">
-<!--    <MSBuild Projects="$(SolutionFile)" Properties="Configuration=$(Configuration);OutputPath=bin\$(Configuration)\NET40;BuildFramework="  />-->
+
 	<MSBuild Projects="$(ProjectFile35)" Properties="Configuration=$(Configuration);OutputPath=$(PackageDir)\temp\$(Project)\lib\NET35;BuildFramework=NET35;SolutionDir=$(SolutionDir)"  />
-	<MSBuild Projects="$(ProjectFilePCL)" Properties="Configuration=$(Configuration);OutputPath=$(PackageDir)\temp\$(Project)\lib\winrt45;SolutionDir=$(SolutionDir)"  />
+	<MSBuild Projects="$(ProjectFilePCL)" Properties="Configuration=$(Configuration);OutputPath=$(PackageDir)\temp\$(Project)\lib\portable;SolutionDir=$(SolutionDir)"  />
   </Target>
  
   <Target Name="Package">
- <!--   <ItemGroup>
-      <MainBinaries Include="$(OutputDir)\**\Tavis.URITemplates.dll" />
-    </ItemGroup>
- -->
-    <!-- First copy the nuspec template files to the package dir -->
-    <Copy SourceFiles="$(MSBuildProjectDirectory)\Tavis.$(Project).nuspec" DestinationFolder="$(PackageDir)\temp\$(Project)" />
  
-    <!-- Copy the source files to the package dir 
-    <Copy SourceFiles="@(MainBinaries)" DestinationFolder="$(PackageDir)\temp\$(Project)\lib\%(RecursiveDir)" />
- 
--->
     <Exec WorkingDirectory="$(BuildDir)\Packages" 
-          Command="$(BaseDir)\lib\nuget\nuget.exe pack $(PackageDir)\temp\$(Project)\Tavis.$(Project).nuspec" />
+          Command="$(BaseDir)\.nuget\nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec" />
   </Target>
 </Project>
