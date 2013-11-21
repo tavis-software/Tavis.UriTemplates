@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Tavis.UriTemplates</id>
-    <version>0.1.2-beta</version>
+    <version>0.4</version>
     <authors>Darrel Miller</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<title>URI Template resolution library</title>
     <description>Implementation of RFC 6570</description>
     <tags>http</tags>
-	<releaseNotes>Added portable version</releaseNotes>
+	<releaseNotes>Added PCL version</releaseNotes>
 	<projectUrl>https://github.com/tavis-software/UriTemplates</projectUrl>
 	</metadata>
     <files>
