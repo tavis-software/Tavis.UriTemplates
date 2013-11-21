@@ -89,6 +89,10 @@ namespace Tavis
                                 currentState = States.ParsingExpression;
                                 currentExpression = new StringBuilder();
                             }
+                            else if (character == '}')
+                            {
+                                throw new ArgumentException("Malformed template, unexpected } : " + _Result.ToString());
+                            }
                             else
                             {
                                 _Result.Append(character);
@@ -114,7 +118,7 @@ namespace Tavis
                     _Result.Append("{");
                     _Result.Append(currentExpression.ToString());
 
-                    throw new ArgumentException("Malformed template : " + _Result.ToString());
+                    throw new ArgumentException("Malformed template, missing } : " + _Result.ToString());
                 }
 
                 if (_ErrorDetected)
@@ -168,8 +172,17 @@ namespace Tavis
                             if (success || !isFirst) varSpec.First = false;
 
                             break;
+                        
+
                         default:
-                            varSpec.VarName.Append(currentChar);
+                            if (IsVarNameChar(currentChar))
+                            {
+                                varSpec.VarName.Append(currentChar);
+                            }
+                            else
+                            {
+                                _ErrorDetected = true;
+                            }
                             break;
                     }
                 }
@@ -307,7 +320,14 @@ namespace Tavis
 
 
 
-
+            private bool IsVarNameChar(char c)
+            {
+                return ((c >= 'A' && c <= 'z') //Alpha
+                        || (c >= '0' && c <= '9') // Digit
+                        || c == '_'
+                        || c == '%'
+                        || c == '.');
+            }
 
             private static string Encode(string p, bool allowReserved)
             {
@@ -322,8 +342,20 @@ namespace Tavis
                     {
                         result.Append(c);
                     }
-                    else {
-                        result.Append(HexEscape(c));
+                    else
+                    {
+#if PCL
+                         result.Append(HexEscape(c));  
+#else
+                        var s = c.ToString();
+
+                        var chars = s.Normalize(NormalizationForm.FormC).ToCharArray();
+                        foreach (var ch in chars)
+                        {
+                            result.Append(HexEscape(ch));
+                        }
+#endif
+
                     }
                 }
 
