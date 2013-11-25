@@ -247,6 +247,15 @@ namespace Tavis
                             }
                             AppendDictionary(varSpec.OperatorInfo, varSpec.Explode, dictionary);
                         }
+                        else
+                        {
+                            var stringValue = value.ToString();
+                            if (varSpec.OperatorInfo.Named)
+                            {
+                                AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                            }
+                            AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
+                        }
 
                     }
 

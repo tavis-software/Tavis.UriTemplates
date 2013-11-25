@@ -39,6 +39,21 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void ShouldResolveUriTemplateWithNonStringParameter()
+        {
+            var template = new UriTemplate("http://example.org/foo/{bar}/baz{?lat,lng}");
+
+            double lat = 31.464, lng = 74.386;
+
+            template.SetParameter("bar", "yo");
+            template.SetParameter("lat", lat);
+            template.SetParameter("lng", lng);
+            
+            var uriString = template.Resolve();
+            Assert.Equal("http://example.org/foo/yo/baz?lat=31.464&lng=74.386", uriString);
+        }
+
+        [Fact]
         public void ShouldAllowUriTemplateWithQueryParamsButNoValues()
         {
             var template = new UriTemplate("http://example.org/foo{?bar,baz}");
