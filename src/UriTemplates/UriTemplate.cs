@@ -247,6 +247,16 @@ namespace Tavis
                             }
                             AppendDictionary(varSpec.OperatorInfo, varSpec.Explode, dictionary);
                         }
+                        else
+                        {
+                            // If above all fails, convert the object to string using the default object.ToString() implementation
+                            var stringValue = value.ToString();
+                            if (varSpec.OperatorInfo.Named)
+                            {
+                                AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                            }
+                            AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
+                        }
 
                     }
 
