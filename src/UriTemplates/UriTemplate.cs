@@ -269,7 +269,7 @@ namespace Tavis
             {
                 foreach (string key in dictionary.Keys)
                 {
-                    _Result.Append(key);
+                    _Result.Append(Encode(key, op.AllowReserved));
                     if (explode) _Result.Append('='); else _Result.Append(',');
                     AppendValue(dictionary[key], 0, op.AllowReserved);
 
@@ -354,17 +354,11 @@ namespace Tavis
                     }
                     else
                     {
-#if PCL
-                         result.Append(HexEscape(c));  
-#else
-                        var s = c.ToString();
-
-                        var chars = s.Normalize(NormalizationForm.FormC).ToCharArray();
-                        foreach (var ch in chars)
+                       var bytes = Encoding.UTF8.GetBytes(new []{c});
+                        foreach (var abyte in bytes)
                         {
-                            result.Append(HexEscape(ch));
+                            result.Append(HexEscape(abyte));
                         }
-#endif
 
                     }
                 }
@@ -373,7 +367,14 @@ namespace Tavis
 
 
             }
-
+            public static string HexEscape(byte i)
+            {
+                var esc = new char[3];
+                esc[0] = '%';
+                esc[1] = HexDigits[((i & 240) >> 4)];
+                esc[2] = HexDigits[(i & 15)];
+                return new string(esc);
+            }
             public static string HexEscape(char c) {
                 var esc = new char[3];
                 esc[0] = '%';

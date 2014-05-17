@@ -17,7 +17,7 @@ namespace UriTemplateTests
                 Assert.Equal(Uri.HexEscape((char)i), UriTemplate.HexEscape((char)i));    
             }
             
-        }
+        } 
 
         [Fact]
         public void ShouldAllowUriTemplateWithPathSegmentParameter()
@@ -227,5 +227,34 @@ namespace UriTemplateTests
 
         }
 
+        [Fact]
+        public void ShouldSupportUnicodeCharacters()
+        {
+            UriTemplate template = new UriTemplate("/lookup{?Stra%C3%9Fe}");
+            template.SetParameter("Stra%C3%9Fe", "Grüner Weg");
+
+            var result = template.Resolve();
+            
+
+            Assert.Equal("/lookup?Stra%C3%9Fe=Gr%C3%BCner%20Weg", result);
+
+        }
+        // "assoc_special_chars"  : { "šöäŸœñê€£¥‡ÑÒÓÔÕ" : "Ö×ØÙÚàáâãäåæçÿ" }
+        [Fact]
+        public void ShouldSupportUnicodeCharacters2()
+        {
+            UriTemplate template = new UriTemplate("{?assoc_special_chars*}");
+            var dict = new Dictionary<string, string>
+            {
+                {"šöäŸœñê€£¥‡ÑÒÓÔÕ", "Ö×ØÙÚàáâãäåæçÿ"}
+            };
+            template.SetParameter("assoc_special_chars", dict);
+
+            var result = template.Resolve();
+
+
+            Assert.Equal("?%C5%A1%C3%B6%C3%A4%C5%B8%C5%93%C3%B1%C3%AA%E2%82%AC%C2%A3%C2%A5%E2%80%A1%C3%91%C3%92%C3%93%C3%94%C3%95=%C3%96%C3%97%C3%98%C3%99%C3%9A%C3%A0%C3%A1%C3%A2%C3%A3%C3%A4%C3%A5%C3%A6%C3%A7%C3%BF", result);
+
+        }
     }
 }

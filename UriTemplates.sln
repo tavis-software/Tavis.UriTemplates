@@ -1,25 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplates", "src\UriTemplates\UriTemplates.csproj", "{F571E020-AB02-4284-BE11-033D6E92EB66}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplateTests", "src\UriTemplateTests\UriTemplateTests.csproj", "{5B4A94DF-2CBB-41BF-AAB3-F7991F0C6A4B}"
-EndProject
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E2DC841E-1899-4B3E-B012-303943A6D52C}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.exe = .nuget\NuGet.exe
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplatesPCL", "src\UriTemplatesPCL\UriTemplatesPCL.csproj", "{F12EB113-49BE-4A8E-BEFB-D04D7C0C2DEF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplatesPCLTests", "src\UriTemplatesPCLTests\UriTemplatesPCLTests.csproj", "{ADBEFEDC-53B9-4835-A546-EBD3B3F9E939}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C994FD2-43CE-4412-BCCD-628DBD8130DF}"
 	ProjectSection(SolutionItems) = preProject
 		License.txt = License.txt
 		Readme.md = Readme.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplates", "src\UriTemplates\UriTemplates.csproj", "{F571E020-AB02-4284-BE11-033D6E92EB66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplateTests", "src\UriTemplateTests\UriTemplateTests.csproj", "{5B4A94DF-2CBB-41BF-AAB3-F7991F0C6A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplatesPCL", "src\UriTemplatesPCL\UriTemplatesPCL.csproj", "{F12EB113-49BE-4A8E-BEFB-D04D7C0C2DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UriTemplatesPCLTests", "src\UriTemplatesPCLTests\UriTemplatesPCLTests.csproj", "{ADBEFEDC-53B9-4835-A546-EBD3B3F9E939}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
