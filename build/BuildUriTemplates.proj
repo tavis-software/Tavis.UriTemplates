@@ -23,6 +23,6 @@
   <Target Name="Package">
  
     <Exec WorkingDirectory="$(BuildDir)\Packages" 
-          Command="$(BaseDir)\.nuget\nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec" />
+          Command="nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec" />
   </Target>
 </Project>

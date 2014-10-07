@@ -129,7 +129,7 @@ namespace UriTemplateTests
                 result = ex.Message;
             }
 
-            Assert.Equal("Malformed template : http://example.org/foo/{bar/baz/", result);
+            Assert.Equal("Malformed template, missing } : http://example.org/foo/{bar/baz/", result);
 
         }
 
