@@ -84,6 +84,19 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void QueryParametersFromDictionary()
+        {
+            var template = new UriTemplate("http://example.org/customers{?query*}");
+            template.SetParameter("query", new Dictionary<string, string>()
+            {
+                {"active","true"}, 
+                {"Country","Brazil"}
+            });
+            var uriString = template.Resolve();
+            Assert.Equal("http://example.org/customers?active=true&Country=Brazil", uriString);
+        }
+
+        [Fact]
         public void ShouldAllowListAndSingleValueInQueryParam()
         {
             var template = new UriTemplate("http://example.org{/id*}{?fields,token}");
