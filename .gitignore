@@ -37,5 +37,6 @@ Download/
 *.pidb
 *.userprefs
 packages
+artifacts
 *.nupkg
 publish-tavis*.ps1
