@@ -1,0 +1,25 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0" DefaultTargets="default">
+  <PropertyGroup>
+    <BaseDir>$(MSBuildProjectDirectory)\..</BaseDir>
+    <Configuration Condition="'$(Configuration)'==''" >Release</Configuration>
+    <ArtifactsDir>$(BaseDir)\artifacts</ArtifactsDir>
+    <BuildDir>$(BaseDir)\build</BuildDir>
+  	<Project>UriTemplates</Project>
+  	<OutputDir>$(BaseDir)\src\$(Project)\bin\$(Configuration)</OutputDir>
+	  <SolutionDir>$(BaseDir)</SolutionDir>  <!-- Needed or import of nuget targets in csproj file fails-->
+  </PropertyGroup>
+ 
+  
+  <Target Name="default" DependsOnTargets="Compile; Package" />
+ 
+  <Target Name="Compile">
+	  <MSBuild Projects="$(BaseDir)\src\UriTemplates\UriTemplates.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net35"  />
+    <MSBuild Projects="$(BaseDir)\src\UriTemplates.net45\UriTemplates.net45.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net45"  />
+	  <MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\portable-net45+sl5+wp8+win8+wpa81+MonoTouch1+MonoAndroid1"  />
+  </Target>
+ 
+  <Target Name="Package">
+      <Exec WorkingDirectory="$(BuildDir)" 
+            Command="nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec -OutputDirectory $(ArtifactsDir)" />
+  </Target>
+</Project>

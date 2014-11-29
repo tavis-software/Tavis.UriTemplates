@@ -11,7 +11,6 @@ namespace Tavis
     using System.Linq;
     using System.Net;
     using System.Text;
-    using System.Web;
 
     namespace UriTemplates
     {
@@ -90,6 +89,10 @@ namespace Tavis
                                 currentState = States.ParsingExpression;
                                 currentExpression = new StringBuilder();
                             }
+                            else if (character == '}')
+                            {
+                                throw new ArgumentException("Malformed template, unexpected } : " + _Result.ToString());
+                            }
                             else
                             {
                                 _Result.Append(character);
@@ -115,7 +118,7 @@ namespace Tavis
                     _Result.Append("{");
                     _Result.Append(currentExpression.ToString());
 
-                    throw new ArgumentException("Malformed template : " + _Result.ToString());
+                    throw new ArgumentException("Malformed template, missing } : " + _Result.ToString());
                 }
 
                 if (_ErrorDetected)
@@ -169,8 +172,17 @@ namespace Tavis
                             if (success || !isFirst) varSpec.First = false;
 
                             break;
+                        
+
                         default:
-                            varSpec.VarName.Append(currentChar);
+                            if (IsVarNameChar(currentChar))
+                            {
+                                varSpec.VarName.Append(currentChar);
+                            }
+                            else
+                            {
+                                _ErrorDetected = true;
+                            }
                             break;
                     }
                 }
@@ -235,6 +247,16 @@ namespace Tavis
                             }
                             AppendDictionary(varSpec.OperatorInfo, varSpec.Explode, dictionary);
                         }
+                        else
+                        {
+                            // If above all fails, convert the object to string using the default object.ToString() implementation
+                            var stringValue = value.ToString();
+                            if (varSpec.OperatorInfo.Named)
+                            {
+                                AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                            }
+                            AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
+                        }
 
                     }
 
@@ -247,7 +269,7 @@ namespace Tavis
             {
                 foreach (string key in dictionary.Keys)
                 {
-                    _Result.Append(key);
+                    _Result.Append(Encode(key, op.AllowReserved));
                     if (explode) _Result.Append('='); else _Result.Append(',');
                     AppendValue(dictionary[key], 0, op.AllowReserved);
 
@@ -308,7 +330,14 @@ namespace Tavis
 
 
 
-
+            private bool IsVarNameChar(char c)
+            {
+                return ((c >= 'A' && c <= 'z') //Alpha
+                        || (c >= '0' && c <= '9') // Digit
+                        || c == '_'
+                        || c == '%'
+                        || c == '.');
+            }
 
             private static string Encode(string p, bool allowReserved)
             {
@@ -325,7 +354,12 @@ namespace Tavis
                     }
                     else
                     {
-                        result.Append(Uri.HexEscape(c));
+                       var bytes = Encoding.UTF8.GetBytes(new []{c});
+                        foreach (var abyte in bytes)
+                        {
+                            result.Append(HexEscape(abyte));
+                        }
+
                     }
                 }
 
@@ -333,7 +367,22 @@ namespace Tavis
 
 
             }
-
+            public static string HexEscape(byte i)
+            {
+                var esc = new char[3];
+                esc[0] = '%';
+                esc[1] = HexDigits[((i & 240) >> 4)];
+                esc[2] = HexDigits[(i & 15)];
+                return new string(esc);
+            }
+            public static string HexEscape(char c) {
+                var esc = new char[3];
+                esc[0] = '%';
+                esc[1] = HexDigits[(((int) c & 240) >> 4)];
+                esc[2] = HexDigits[((int) c & 15)];
+                return new string(esc);
+            }
+            private static readonly char[] HexDigits = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 
             private static OperatorInfo GetOperator(char operatorIndicator)
             {
