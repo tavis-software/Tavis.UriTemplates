@@ -52,5 +52,13 @@ namespace UriTemplateTests
             var url = urltemplate.ApplyParameters(new { bar="yo"});
             Assert.Equal("http://example.org/foo/yo/baz", url.AbsoluteUri);
         }
+
+        [Fact]
+        public void ApplyParametersObjectWithAList()
+        {
+            var urltemplate = new Uri("http://example.org/foo/{bar}/baz{?ids,order}");
+            var url = urltemplate.ApplyParameters(new { bar = "yo", order="up",ids=new List<string> {"a","b","c"} });
+            Assert.Equal("http://example.org/foo/yo/baz?ids=a,b,c&order=up", url.AbsoluteUri);
+        }
     }
 }
