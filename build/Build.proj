@@ -20,6 +20,6 @@
  
   <Target Name="Package">
       <Exec WorkingDirectory="$(BuildDir)" 
-            Command="nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec -OutputDirectory $(ArtifactsDir)" />
+            Command="nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec -OutputDirectory $(ArtifactsDir) -Version $(APPVEYOR_BUILD_VERSION)" />
   </Target>
 </Project>
