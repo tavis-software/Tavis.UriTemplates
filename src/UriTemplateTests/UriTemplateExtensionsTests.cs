@@ -196,7 +196,7 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/api/customer/{id}", url);
         }
 
-        //[Fact]
+        [Fact]
         public void PartiallyParametersFromAnObjectFromInvalidUrl()
         {
 

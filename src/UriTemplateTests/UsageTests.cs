@@ -14,7 +14,7 @@ namespace UriTemplateTests
         public void TestHexEscape()
         {
             for (int i = 20; i < 128; i++) {
-                Assert.Equal(Uri.HexEscape((char)i), UriTemplate.HexEscape((char)i));    
+                Assert.Equal(Uri.HexEscape((char)i), Result.HexEscape((char)i));    
             }
             
         }
