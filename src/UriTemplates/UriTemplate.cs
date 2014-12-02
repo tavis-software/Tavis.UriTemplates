@@ -38,8 +38,11 @@ namespace Tavis
             private StringBuilder _Result;
             private List<string> _ParameterNames;
 
-            public UriTemplate(string template)
+            private bool _resolvePartially;
+
+            public UriTemplate(string template, bool resolvePartially = false )
             {
+                _resolvePartially = resolvePartially;
                 _template = template;
             }
 
@@ -63,7 +66,6 @@ namespace Tavis
             {
                 _Parameters[name] = value;
             }
-
 
             public IEnumerable<string> GetParameterNames()
             {
@@ -141,7 +143,7 @@ namespace Tavis
                 OperatorInfo op = GetOperator(currentExpression[0]);
 
                 var firstChar = op.Default ? 0 : 1;
-
+                bool multivariableExpression = false;
 
                 var varSpec = new VarSpec(op);
                 for (int i = firstChar; i < currentExpression.Length; i++)
@@ -165,7 +167,8 @@ namespace Tavis
                             i--;
                             break;
                         case ',':
-                            var success = ProcessVariable(varSpec);
+                            multivariableExpression = true;
+                            var success = ProcessVariable(varSpec, multivariableExpression);
                             bool isFirst = varSpec.First;
                             // Reset for new variable
                             varSpec = new VarSpec(op);
@@ -186,19 +189,37 @@ namespace Tavis
                             break;
                     }
                 }
-                ProcessVariable(varSpec);
 
+                ProcessVariable(varSpec, multivariableExpression);
+                if (multivariableExpression && _resolvePartially) _Result.Append("}");
             }
 
-            private bool ProcessVariable(VarSpec varSpec)
+            private bool ProcessVariable(VarSpec varSpec, bool multiVariableExpression = false)
             {
                 var varname = varSpec.VarName.ToString();
                 if (_ParameterNames != null) _ParameterNames.Add(varname);
 
                 if (!_Parameters.ContainsKey(varname)
-                        || _Parameters[varname] == null
-                        || (_Parameters[varname] is IList && ((IList)_Parameters[varname]).Count == 0)
-                        || (_Parameters[varname] is IDictionary && ((IDictionary)_Parameters[varname]).Count == 0)) return false;
+                    || _Parameters[varname] == null
+                    || (_Parameters[varname] is IList && ((IList) _Parameters[varname]).Count == 0)
+                    || (_Parameters[varname] is IDictionary && ((IDictionary) _Parameters[varname]).Count == 0))
+                {
+                    if (_resolvePartially == true)
+                    {
+                        if (multiVariableExpression)
+                        {
+                            if (varSpec.First) _Result.Append("{");
+                            _Result.Append(varSpec.ToString());
+                        }
+                        else
+                        {
+                            _Result.Append("{");
+                            _Result.Append(varSpec.ToString());
+                            _Result.Append("}");
+                        }
+                    }
+                    return false;
+                }
 
                 if (varSpec.First)
                 {
@@ -224,12 +245,16 @@ namespace Tavis
                 else
                 {
                     // Handle Lists
-                    var list = value as IEnumerable<string>;
+                    var list = value as IList;
+                    if (list == null && value is IEnumerable<string>)
+                    {
+                        list = ((IEnumerable<string>)value).ToList<string>();
+                    } ;
                     if (list != null)
                     {
                         if (varSpec.OperatorInfo.Named && !varSpec.Explode)  // exploding will prefix with list name
                         {
-                            AppendName(varname, varSpec.OperatorInfo, list.Count() == 0);
+                            AppendName(varname, varSpec.OperatorInfo, list.Count == 0);
                         }
 
                         AppendList(varSpec.OperatorInfo, varSpec.Explode, varname, list);
@@ -288,20 +313,20 @@ namespace Tavis
                 }
             }
 
-            private void AppendList(OperatorInfo op, bool explode, string variable, IEnumerable<string> list)
+            private void AppendList(OperatorInfo op, bool explode, string variable, IList list)
             {
-                foreach (string item in list)
+                foreach (object item in list)
                 {
                     if (op.Named && explode)
                     {
                         _Result.Append(variable);
                         _Result.Append("=");
                     }
-                    AppendValue(item, 0, op.AllowReserved);
+                    AppendValue(item.ToString(), 0, op.AllowReserved);
 
                     _Result.Append(explode ? op.Seperator : ',');
                 }
-                if (list.Count() > 0)
+                if (list.Count > 0)
                 {
                     _Result.Remove(_Result.Length - 1, 1);
                 }
@@ -426,6 +451,7 @@ namespace Tavis
                 public bool Explode = false;
                 public int PrefixLength = 0;
                 public bool First = true;
+                public string FirstChar = "";
 
                 public VarSpec(OperatorInfo operatorInfo)
                 {
@@ -436,8 +462,19 @@ namespace Tavis
                 {
                     get { return _operatorInfo; }
                 }
+
+                public override string ToString()
+                {
+                    return (First ? FirstChar : "") +
+                            VarName.ToString()
+                           + (Explode ? "*" : "")
+                           + (PrefixLength > 0 ? ":" + PrefixLength : "");
+
+                }
             }
         }
+
+        
     }
 
 
