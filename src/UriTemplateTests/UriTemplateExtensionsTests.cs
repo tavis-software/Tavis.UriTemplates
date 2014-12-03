@@ -118,7 +118,7 @@ namespace UriTemplateTests
         }
 
         [Fact]
-        public void TextExtremeEncoding()
+        public void ExtremeEncoding()
         {
             var url = new UriTemplate("http://example.org/sparql{?query}")
                     .AddParameter("query", "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }")
