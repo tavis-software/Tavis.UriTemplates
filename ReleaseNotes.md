@@ -1,6 +1,6 @@
 # Uri Templates #
 
-##0.5.0
+##0.6.0
 - Added the ability to partially resolve templates using a new constructor parameter.
 - Added new fluent interface using extension methods for quickly creating a template and resolving it.
 - Created a .net 45 project
