@@ -14,11 +14,12 @@ namespace UriTemplateTests
         public void TestHexEscape()
         {
             for (int i = 20; i < 128; i++) {
-                Assert.Equal(Uri.HexEscape((char)i), UriTemplate.HexEscape((char)i));    
+                Assert.Equal(Uri.HexEscape((char)i), Result.HexEscape((char)i));    
             }
             
-        } 
+        }
 
+        
         [Fact]
         public void ShouldAllowUriTemplateWithPathSegmentParameter()
         {
@@ -208,7 +209,6 @@ namespace UriTemplateTests
             template.SetParameter("query", "1234");
             template.SetParameter("per_page", "19");
             var result = template.Resolve();
-
         }
 
 

@@ -2,14 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Tavis.UriTemplates</id>
-    <version>0.5.0-beta2</version>
+    <version>0.5.0-beta3</version>
     <authors>Darrel Miller</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<title>URI Template resolution library</title>
     <description>Implementation of RFC 6570</description>
     <tags>http</tags>
-	<releaseNotes>Added support for Windows Phone 8.1</releaseNotes>
-	<projectUrl>https://github.com/tavis-software/UriTemplates</projectUrl>
+    <releaseNotes>
+      <![CDATA[
+            For full release notes see https://github.com/tavis-software/Tavis.UriTemplates/blob/master/ReleaseNotes.md
+            ]]>
+    </releaseNotes>
+	<projectUrl>https://github.com/tavis-software/Tavis.UriTemplates</projectUrl>
 	</metadata>
     <files>
         <file src="..\artifacts\lib\**\.*" target="lib" />

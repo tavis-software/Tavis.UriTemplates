@@ -41,8 +41,20 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\UriTemplates\OperatorInfo.cs">
+      <Link>OperatorInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\UriTemplates\Result.cs">
+      <Link>Result.cs</Link>
+    </Compile>
     <Compile Include="..\UriTemplates\UriTemplate.cs">
       <Link>UriTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\UriTemplates\UriTemplateExtensions.cs">
+      <Link>UriTemplateExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\UriTemplates\VarSpec.cs">
+      <Link>VarSpec.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
