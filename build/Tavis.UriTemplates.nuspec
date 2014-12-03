@@ -5,8 +5,8 @@
     <version>0.6.0-beta1</version>
     <authors>Darrel Miller</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<title>URI Template resolution library</title>
-    <description>Implementation of RFC 6570</description>
+	  <title>Tavis.UriTemplates</title>
+    <description>URI Template resolution library - Implementation of RFC 6570</description>
     <tags>http</tags>
     <releaseNotes>
       <![CDATA[

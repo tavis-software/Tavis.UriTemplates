@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Tavis.UriTemplates;
-
-namespace Tavis
+﻿namespace Tavis.UriTemplates
 {
     public static class UriTemplateExtensions
     {
