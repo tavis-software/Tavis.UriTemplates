@@ -210,5 +210,20 @@ namespace UriTemplateTests
 
             Assert.Equal("http://dev.example.org/v2/customers{?active,country}", url);
         }
+
+
+        [Fact]
+        public void PartiallyApplyFoldersToPathFromStringNotUrl()
+        {
+
+            var url = new UriTemplate("http://example.org{/folders*}{?filename}",true)
+                .AddParameters(new
+                {
+                    filename = "proposal.pdf"
+                })
+                .Resolve();
+
+            Assert.Equal("http://example.org{/folders*}?filename=proposal.pdf", url);
+        }
     }
 }

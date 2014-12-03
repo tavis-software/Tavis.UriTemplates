@@ -151,6 +151,7 @@ namespace Tavis.UriTemplates
                         case '*':
                             varSpec.Explode = true;
                             break;
+
                         case ':':  // Parse Prefix Modifier
                             var prefixText = new StringBuilder();
                             currentChar = currentExpression[++i];
@@ -163,15 +164,16 @@ namespace Tavis.UriTemplates
                             varSpec.PrefixLength = int.Parse(prefixText.ToString());
                             i--;
                             break;
+
                         case ',':
                             multivariableExpression = true;
                             var success = ProcessVariable(varSpec, multivariableExpression);
                             bool isFirst = varSpec.First;
                             // Reset for new variable
                             varSpec = new VarSpec(op);
-                            if (success || !isFirst) varSpec.First = false;
-
-                            break;
+                            if (success || !isFirst || _resolvePartially) varSpec.First = false;
+                            if (!success && _resolvePartially) {_Result.Append(",") ; }
+                            break; 
                         
 
                         default:
@@ -205,7 +207,11 @@ namespace Tavis.UriTemplates
                     {
                         if (multiVariableExpression)
                         {
-                            if (varSpec.First) _Result.Append("{");
+                            if (varSpec.First)
+                            {
+                                _Result.Append("{");
+                            }
+
                             _Result.Append(varSpec.ToString());
                         }
                         else
@@ -214,6 +220,7 @@ namespace Tavis.UriTemplates
                             _Result.Append(varSpec.ToString());
                             _Result.Append("}");
                         }
+                        return false;
                     }
                     return false;
                 }

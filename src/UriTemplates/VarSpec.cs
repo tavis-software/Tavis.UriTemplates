@@ -9,7 +9,6 @@ namespace Tavis.UriTemplates
         public bool Explode = false;
         public int PrefixLength = 0;
         public bool First = true;
-        public string FirstChar = "";
 
         public VarSpec(OperatorInfo operatorInfo)
         {
@@ -23,7 +22,7 @@ namespace Tavis.UriTemplates
 
         public override string ToString()
         {
-            return (First ? FirstChar : "") +
+            return (First ? _operatorInfo.First : "") +
                    VarName.ToString()
                    + (Explode ? "*" : "")
                    + (PrefixLength > 0 ? ":" + PrefixLength : "");
