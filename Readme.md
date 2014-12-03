@@ -91,7 +91,7 @@ We also handle all the complex URI encoding rules automatically.
             Assert.Equal("http://example.org/sparql?query=PREFIX%20dc%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%20SELECT%20%3Fbook%20%3Fwho%20WHERE%20%7B%20%3Fbook%20dc%3Acreator%20%3Fwho%20%7D", url);
         }
 
-An upcoming blogpost on http://www.bizcoder.com will cover these examples and more in detail.
+There is a [blogpost](http://bizcoder.com/constructing-urls-the-easy-way) that discusses these examples and more in detail.
 
 
 Current this library does not pass all of the failure tests.  I.e. If you pass an invalid URI Template, you may not get an exception.
