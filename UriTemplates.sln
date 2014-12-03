@@ -22,6 +22,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{718037C6-0F82-456A-B7EB-531694D035B4}"
 	ProjectSection(SolutionItems) = preProject
 		build\Build.proj = build\Build.proj
+		ReleaseNotes.md = ReleaseNotes.md
 		build\Tavis.UriTemplates.nuspec = build\Tavis.UriTemplates.nuspec
 	EndProjectSection
 EndProject

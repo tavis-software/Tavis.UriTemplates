@@ -53,6 +53,17 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void ShouldResolveUriTemplateWithNonStringParameter()
+        {
+            var url = new UriTemplate("http://example.org/location{?lat,lng}")
+                .AddParameters(new { lat = 31.464, lng = 74.386 })
+                .Resolve();
+
+            Assert.Equal("http://example.org/location?lat=31.464&lng=74.386", url);
+        }
+
+
+        [Fact]
         public void ParametersFromAnObject()
         {
             var url = new UriTemplate("http://example.org/{environment}/{version}/customers{?active,country}")
@@ -66,6 +77,20 @@ namespace UriTemplateTests
                 .Resolve();
 
             Assert.Equal("http://example.org/dev/v2/customers?active=true&country=CA", url);
+        }
+
+        [Fact]
+        public void SomeParametersFromAnObject()
+        {
+            var url = new UriTemplate("http://example.org{/environment}{/version}/customers{?active,country}")
+                .AddParameters(new
+                {
+                    version = "v2",
+                    active = "true"
+                })
+                .Resolve();
+
+            Assert.Equal("http://example.org/v2/customers?active=true", url);
         }
 
         [Fact]
@@ -90,6 +115,15 @@ namespace UriTemplateTests
                 .Resolve();
 
             Assert.Equal("http://example.org/foo/yo/baz", url);
+        }
+
+        [Fact]
+        public void TextExtremeEncoding()
+        {
+            var url = new UriTemplate("http://example.org/sparql{?query}")
+                    .AddParameter("query", "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }")
+                    .Resolve();
+            Assert.Equal("http://example.org/sparql?query=PREFIX%20dc%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%20SELECT%20%3Fbook%20%3Fwho%20WHERE%20%7B%20%3Fbook%20dc%3Acreator%20%3Fwho%20%7D", url);
         }
 
         [Fact]
