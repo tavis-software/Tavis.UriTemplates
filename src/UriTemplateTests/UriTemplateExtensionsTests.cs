@@ -154,6 +154,20 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void ApplyParametersObjectWithAListofIntsExploded()
+        {
+            var url = new UriTemplate("http://example.org/customers{?ids*,order}")
+                .AddParameters(new
+                {
+                    order = "up",
+                    ids = new[] { 21, 75, 21 }
+                })
+                .Resolve();
+
+            Assert.Equal("http://example.org/customers?ids=21&ids=75&ids=21&order=up", url);
+        }
+
+        [Fact]
         public void ApplyFoldersToPath()
         {
             var url = new UriTemplate("http://example.org/files{/folders*}{?filename}")
@@ -258,6 +272,29 @@ namespace UriTemplateTests
                 .Resolve();
 
             Assert.Equal("http://example.org{/folders*}?filename=proposal.pdf", url);
+        }
+
+        [Fact]
+        public void UseArbitraryClassAsParameter()
+        {
+
+
+            var url = new UriTemplate("/{test}", true)
+                .AddParameters(new
+                {
+                    test = new Something()
+                })
+                .Resolve();
+
+            Assert.Equal("/something", url);
+        }
+    }
+
+    class Something
+    {
+        public override string ToString()
+        {
+            return "something";
         }
     }
 }
