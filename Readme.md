@@ -93,5 +93,9 @@ We also handle all the complex URI encoding rules automatically.
 
 There is a [blogpost](http://bizcoder.com/constructing-urls-the-easy-way) that discusses these examples and more in detail.
 
+As well as having a set of regular usage tests, this library also executes tests based on a standard test suite.  This test suite is pulled in as a Git Submodule, therefore when cloning this repo, you will need use the `--recursive` switch,
+
+        git clone --recursive git@github.com:tavis-software/Tavis.UriTemplates.git
+
 
 Current this library does not pass all of the failure tests.  I.e. If you pass an invalid URI Template, you may not get an exception.
