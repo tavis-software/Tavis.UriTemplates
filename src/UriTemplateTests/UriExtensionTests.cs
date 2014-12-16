@@ -23,6 +23,41 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void Change_an_existing_parameter()
+        {
+            var target = new Uri("http://example/customer?view=False&foo=bar");
+
+            var template = target.MakeTemplate();
+            template.SetParameter("view",true);
+
+            Assert.Equal("http://example/customer?view=True&foo=bar", template.Resolve());
+        }
+
+        [Fact]
+        public void Remove_an_existing_parameter()
+        {
+            var target = new Uri("http://example/customer?view=False&foo=bar");
+
+            var template = target.MakeTemplate();
+            template.ClearParameter("view");
+
+            Assert.Equal("http://example/customer?foo=bar", template.Resolve());
+        }
+
+        [Fact]
+        public void Remove_a_query_parameters2()
+        {
+
+            var target = new Uri("http://example.org/customer?format=xml&id=23");
+
+            var template = target.MakeTemplate();
+            template.ClearParameter("format");
+
+
+            Assert.Equal("http://example.org/customer?id=23", template.Resolve());
+        }
+
+        [Fact]
         public void Add_multiple_parameters_to_uri()
         {
             var target = new Uri("http://example/customer");
