@@ -49,6 +49,11 @@ namespace Tavis.UriTemplates
                 _Parameters[name] = value;
             }
 
+            public void ClearParameter(string name)
+            {
+                _Parameters.Remove(name);
+            }
+
             public void SetParameter(string name, string value)
             {
                 _Parameters[name] = value;
