@@ -64,6 +64,20 @@ namespace UriTemplateTests
             var uriString = template.Resolve();
             Assert.Equal("http://example.org/foo", uriString);
         }
+
+        [Fact]
+        public void ShouldAllowUriTemplateToRemoveParameter()
+        {
+            var template = new UriTemplate("http://example.org/foo{?bar,baz}");
+            template.SetParameter("bar", "yo");
+            template.SetParameter("baz", "yuck");
+            template.ClearParameter("bar");
+
+            var uriString = template.Resolve();
+            Assert.Equal("http://example.org/foo?baz=yuck", uriString);
+        }
+        
+        
         [Fact]
         public void ShouldAllowUriTemplateWithQueryParamsWithOneValue()
         {

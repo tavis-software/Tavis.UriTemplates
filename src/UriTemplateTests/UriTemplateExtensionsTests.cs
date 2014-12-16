@@ -288,6 +288,25 @@ namespace UriTemplateTests
 
             Assert.Equal("/something", url);
         }
+
+
+        [Fact]
+        public void AddMultipleParametersToLink()
+        {
+            var template = new UriTemplate("http://localhost/api/{dataset}/customer{?foo,bar,baz}");
+
+            template.AddParameters(new Dictionary<string, object>
+            {
+                {"foo", "bar"},
+                {"baz", "99"},
+                {"dataset", "bob"}
+            });
+
+            var uri = template.Resolve();
+
+            Assert.Equal("http://localhost/api/bob/customer?foo=bar&baz=99", uri);
+        }
+
     }
 
     class Something
