@@ -1,5 +1,7 @@
 # Uri Templates #
 
+##0.6.2
+- URI Template Extension AddParameters now uses IDictionary instead of Dictionary
 ##0.6.1
 - Added ClearParameter to unset a template parameter
 - Added MakeTemplate URI extension for creating a Uri template based on the query string parameters of a URI
