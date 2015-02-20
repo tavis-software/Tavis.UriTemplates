@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Tavis.UriTemplates
@@ -20,7 +21,7 @@ namespace Tavis.UriTemplates
             if (parametersObject != null)
             {
                 var type = parametersObject.GetType();
-                foreach (var propinfo in type.GetProperties())
+                foreach (var propinfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                 {
                     template.SetParameter(propinfo.Name, propinfo.GetValue(parametersObject, null));
                 }

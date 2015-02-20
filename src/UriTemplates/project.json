@@ -1,0 +1,22 @@
+{
+  "version": "0.6.2-*",
+  "authors": ["Darrel Miller"],
+  "description": "URI Template resolution library - Implementation of RFC 6570",
+  "frameworks": {
+    "net35": {},
+    "net45": {},
+    "net45+sl5+wp8+win8+wpa81+MonoTouch1+MonoAndroid1" : {},
+    "aspnet50": {},
+    "aspnetcore50": {
+      "dependencies": {
+	"System.Runtime" : "4.0.20-beta-22231",
+	"System.Text.RegularExpressions" : "4.0.10-beta-22231",
+	"System.Collections": "4.0.10-beta-22231",
+	"System.Reflection": "4.0.10-beta-22231",
+	"System.Reflection.TypeExtensions": "4.0.0-beta-22231",
+	"System.Linq" : "4.0.0-beta-22231",
+	"System.Text.Encoding" : "4.0.10-beta-22231"
+      }
+    }
+  }
+}
