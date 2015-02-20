@@ -28,7 +28,7 @@ namespace Tavis.UriTemplates
 
             return template;
         }
-        public static UriTemplate AddParameters(this UriTemplate uriTemplate, Dictionary<string, object> linkParameters)
+        public static UriTemplate AddParameters(this UriTemplate uriTemplate, IDictionary<string, object> linkParameters)
         {
             if (linkParameters != null)
             {
@@ -50,7 +50,7 @@ namespace Tavis.UriTemplates
 
         }
 
-        public static UriTemplate MakeTemplate(this Uri uri, Dictionary<string, object> parameters)
+        public static UriTemplate MakeTemplate(this Uri uri, IDictionary<string, object> parameters)
         {
             var target = uri.GetComponents(UriComponents.AbsoluteUri
                                                      & ~UriComponents.Query
