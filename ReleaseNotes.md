@@ -1,5 +1,7 @@
 # Uri Templates #
 
+##0.6.3
+- Added ToString() overload to allow retreiving unresolved template
 ##0.6.2
 - URI Template Extension AddParameters now uses IDictionary instead of Dictionary
 ##0.6.1
