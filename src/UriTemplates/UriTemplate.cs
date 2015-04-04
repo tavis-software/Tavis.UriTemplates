@@ -42,6 +42,10 @@ namespace Tavis.UriTemplates
                 _template = template;
             }
 
+            public override string ToString()
+            {
+                return _template;
+            }
 
             public void SetParameter(string name, object value)
             {
@@ -297,8 +301,6 @@ namespace Tavis.UriTemplates
                 return true;
             }
 
-
-
             private static bool IsVarNameChar(char c)
             {
                 return ((c >= 'A' && c <= 'z') //Alpha
@@ -307,6 +309,7 @@ namespace Tavis.UriTemplates
                         || c == '%'
                         || c == '.');
             }
+
             private static OperatorInfo GetOperator(char operatorIndicator)
             {
                 OperatorInfo op;
