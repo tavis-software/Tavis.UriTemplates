@@ -28,7 +28,7 @@ namespace Tavis.UriTemplates
                                         };
 
             private readonly string _template;
-            private readonly Dictionary<string, object> _Parameters = new Dictionary<string, object>();
+            private readonly Dictionary<string, object> _Parameters;
             private enum States { CopyingLiterals, ParsingExpression }
             private bool _ErrorDetected = false;
             private Result _Result;
@@ -36,10 +36,13 @@ namespace Tavis.UriTemplates
 
             private bool _resolvePartially;
 
-            public UriTemplate(string template, bool resolvePartially = false )
+            public UriTemplate(string template, bool resolvePartially = false, bool caseInsensitiveParameterNames = false)
             {
                 _resolvePartially = resolvePartially;
                 _template = template;
+                _Parameters = caseInsensitiveParameterNames
+                    ? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                    : new Dictionary<string, object>();
             }
 
             public override string ToString()
