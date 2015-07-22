@@ -296,5 +296,99 @@ namespace UriTemplateTests
 
             Assert.Equal("http://example.org/customer?id=23", template.Resolve());
         }
+
+
+        [Fact]
+        public void EncodingTest1()
+        {
+
+            var url = new UriTemplate("/1/search/auto/{folder}{?query}")
+                .AddParameter("folder","My Documents")
+                .AddParameter("query", "draft 2013")
+                .Resolve();
+
+            Assert.Equal("/1/search/auto/My%20Documents?query=draft%202013", url);
+        }
+
+        [Fact]
+        public void EncodingTest2()
+        {
+
+            // Parameter values get encoded but hyphen doesn't need to be encoded because it
+            // is an "unreserved" character according to RFC 3986
+            var url = new UriTemplate("{/greeting}")
+                .AddParameter("greeting", "hello-world")
+                .Resolve();
+
+            Assert.Equal("/hello-world", url);
+
+            // A slash does need to be encoded
+            var url2 = new UriTemplate("{/greeting}")
+                .AddParameter("greeting", "hello/world")
+                .Resolve();
+
+            Assert.Equal("/hello%2Fworld", url2);
+
+            // If you truly want to make multiple path segments then do this
+            var url3 = new UriTemplate("{/greeting*}")
+                .AddParameter("greeting", new List<string> {"hello","world"})
+                .Resolve();
+
+            Assert.Equal("/hello/world", url3);
+
+        }
+
+        //  /docs/salary.csv?columns=1,2
+        //  /docs/salary.csv?column=1&column=2
+
+        //   /emails?from[name]=Don&from[date]=1998-03-24&to[name]=Norm
+
+        // : /log?a=b&c=4
+        [Fact]
+        public void EncodingTest3()
+        {
+
+            // There are different ways that lists can be included in query params
+            // Just as a comma delimited list
+            var url = new UriTemplate("/docs/salary.csv{?columns}")
+                .AddParameter("columns", new List<int> {1,2})
+                .Resolve();
+
+            Assert.Equal("/docs/salary.csv?columns=1,2", url);
+
+            // or as a multiple parameter instances
+            var url2 = new UriTemplate("/docs/salary.csv{?columns*}")
+                .AddParameter("columns", new List<int> { 1, 2 })
+                .Resolve();
+
+            Assert.Equal("/docs/salary.csv?columns=1&columns=2", url2);
+        }
+
+        [Fact]
+        public void EncodingTest4()
+        {
+            var url = new UriTemplate("/emails{?params*}")
+                .AddParameter("params", new Dictionary<string,string>
+                {
+                    {"from[name]","Don"},
+                    {"from[date]","1998-03-24"},
+                    {"to[name]","Norm"}
+                })
+                .Resolve();
+
+            Assert.Equal("/emails?from[name]=Don&from[date]=1998-03-24&to[name]=Norm", url);
+        }
+
+        [Fact]
+        public void EncodingTest5()
+        {
+            ///log?a=b&c=4
+            var url = new UriTemplate("/log?a={a}&c={c}")
+                .AddParameter("a", "b")
+                .AddParameter("c", "4")
+                .Resolve();
+
+            Assert.Equal("/log?a=b&c=4", url);
+        }
     }
 }
