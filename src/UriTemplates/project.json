@@ -5,7 +5,27 @@
   "frameworks": {
     "net35": {},
     "net45": {},
-    "net45+sl5+wp8+win8+wpa81+MonoTouch1+MonoAndroid1" : {},
+    ".NETPortable,Version=4.5,Profile=Profile259": {
+        "frameworkAssemblies": {
+            "mscorlib": "",
+            "System.Collections": "",
+            "System.ComponentModel": "",
+            "System.Diagnostics.Debug": "",
+            "System.Globalization": "",
+            "System.IO": "",
+            "System.Linq": "",
+            "System.Reflection": "",
+            "System.Reflection.Primitives": "",
+            "System.Reflection.TypeExtensions" : "",
+            "System.Resources.ResourceManager": "",
+            "System.Runtime": "",
+            "System.Runtime.Extensions": "",
+            "System.Security.Principal": "",
+            "System.Text.RegularExpressions": "",
+            "System.Text.Encoding": "",
+            "System.Threading.Tasks": ""
+        }
+    },
     "aspnet50": {},
     "aspnetcore50": {
       "dependencies": {
