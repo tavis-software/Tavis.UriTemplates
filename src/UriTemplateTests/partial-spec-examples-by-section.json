@@ -58,7 +58,7 @@
         ["{hello}", "Hello%20World%21"],
         ["{half}", "50%25"],
         ["O{empty}X", "OX"],
-        ["O{undef}X", "OX"],
+        ["O{undef}X", "O{undef}X"],
         ["{x,y}", "1024,768"],
         ["{x,hello,y}", "1024,Hello%20World%21,768"],
         ["?{x,empty}", "?1024,"],
@@ -110,13 +110,13 @@
      "testcases" : [
         ["{+var}", "value"],
         ["{/var,empty}", "/value/"],
-        ["{/var,undef}", "/value"],
+        ["{/var,undef}", "/value{/undef}"],
         ["{+hello}", "Hello%20World!"],
         ["{+half}", "50%25"],
         ["{base}index", "http%3A%2F%2Fexample.com%2Fhome%2Findex"],
         ["{+base}index", "http://example.com/home/index"],
         ["O{+empty}X", "OX"],
-        ["O{+undef}X", "OX"],
+        ["O{+undef}X", "O{+undef}X"],
         ["{+path}/here", "/foo/bar/here"],
         ["{+path:6}/here", "/foo/b/here"],
         ["here?ref={+path}", "here?ref=/foo/bar"],
@@ -169,7 +169,7 @@
         ["{#hello}", "#Hello%20World!"],
         ["{#half}", "#50%25"],
         ["foo{#empty}", "foo#"],
-        ["foo{#undef}", "foo"],
+        ["foo{#undef}", "foo{#undef}"],
         ["{#x,hello,y}", "#1024,Hello%20World!,768"],
         ["{#path,x}/here", "#/foo/bar,1024/here"],
         ["{#path:6}/here", "#/foo/b/here"],
@@ -214,7 +214,7 @@
        ["X{.var}", "X.value"],
        ["X{.var:3}", "X.val"],
        ["X{.empty}", "X."],
-       ["X{.undef}", "X"],
+       ["X{.undef}", "X{.undef}"],
        ["X{.list}", "X.red,green,blue"],
        ["X{.list*}", "X.red.green.blue"],
        ["{#keys}", [
@@ -233,8 +233,8 @@
         "#semi=;,comma=,,dot=.",
         "#semi=;,dot=.,comma=,"
        ]],
-       ["X{.empty_keys}", "X"],
-       ["X{.empty_keys*}", "X"]
+       ["X{.empty_keys}", "X{.empty_keys}"],
+       ["X{.empty_keys*}", "X{.empty_keys*}"]
     ]
   },
   "3.2.6 Path Segment Expansion" :
@@ -265,7 +265,7 @@
        ["{/who,dub}", "/fred/me%2Ftoo"],
        ["{/var}", "/value"],
        ["{/var,empty}", "/value/"],
-       ["{/var,undef}", "/value"],
+       ["{/var,undef}", "/value{/undef}"],
        ["{/var,x}/here", "/value/1024/here"],
        ["{/var:1,var}", "/v/value"],
        ["{/list}", "/red,green,blue"],
@@ -316,10 +316,10 @@
         ["{;empty}", ";empty"],
         ["{;hello:5}", ";hello=Hello"],
         ["{;v,empty,who}", ";v=6;empty;who=fred"],
-        ["{;v,bar,who}", ";v=6;who=fred"],
+        ["{;v,bar,who}", ";v=6;who=fred{;bar}"],
         ["{;x,y}", ";x=1024;y=768"],
         ["{;x,y,empty}", ";x=1024;y=768;empty"],
-        ["{;x,y,undef}", ";x=1024;y=768"],
+        ["{;x,y,undef}", ";x=1024;y=768{;undef}"],
         ["{;list}", ";list=red,green,blue"],
         ["{;list*}", ";list=red;list=green;list=blue"],
         ["{;keys}", [ 
@@ -366,7 +366,7 @@
         ["{?half}", "?half=50%25"],
         ["{?x,y}", "?x=1024&y=768"],
         ["{?x,y,empty}", "?x=1024&y=768&empty="],
-        ["{?x,y,undef}", "?x=1024&y=768"],
+        ["{?x,y,undef}", "?x=1024&y=768{&undef}"],
         ["{?var:3}", "?var=val"],
         ["{?list}", "?list=red,green,blue"],
         ["{?list*}", "?list=red&list=green&list=blue"],
@@ -415,7 +415,7 @@
           ["?fixed=yes{&x}", "?fixed=yes&x=1024"],
           ["{&var:3}", "&var=val"],
           ["{&x,y,empty}", "&x=1024&y=768&empty="],
-          ["{&x,y,undef}", "&x=1024&y=768"],
+          ["{&x,y,undef}", "&x=1024&y=768{&undef}"],
           ["{&list}", "&list=red,green,blue"],
           ["{&list*}", "&list=red&list=green&list=blue"],
           ["{&keys}", [ 
