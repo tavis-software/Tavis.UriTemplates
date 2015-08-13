@@ -8,7 +8,7 @@
     <ProjectGuid>{F571E020-AB02-4284-BE11-033D6E92EB66}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Tavis</RootNamespace>
+    <RootNamespace>Tavis.UriTemplates</RootNamespace>
     <AssemblyName>Tavis.UriTemplates</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

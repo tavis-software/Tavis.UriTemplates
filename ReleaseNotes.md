@@ -1,6 +1,15 @@
 # Uri Templates #
 
-##0.5.0
+##0.6.3
+- Added ToString() overload to allow retreiving unresolved template
+##0.6.2
+- URI Template Extension AddParameters now uses IDictionary instead of Dictionary
+##0.6.1
+- Added ClearParameter to unset a template parameter
+- Added MakeTemplate URI extension for creating a Uri template based on the query string parameters of a URI
+- Added GetQueryStringParameters URI extension for building dictionary of query parameters and values
+- Added AddParameters overload that accepts a dictionary of template parameters
+##0.6.0
 - Added the ability to partially resolve templates using a new constructor parameter.
 - Added new fluent interface using extension methods for quickly creating a template and resolving it.
 - Created a .net 45 project

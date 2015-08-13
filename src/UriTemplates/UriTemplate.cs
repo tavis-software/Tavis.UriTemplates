@@ -9,7 +9,6 @@ namespace Tavis.UriTemplates
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Text;
 
 
@@ -29,7 +28,7 @@ namespace Tavis.UriTemplates
                                         };
 
             private readonly string _template;
-            private readonly Dictionary<string, object> _Parameters = new Dictionary<string, object>();
+            private readonly Dictionary<string, object> _Parameters;
             private enum States { CopyingLiterals, ParsingExpression }
             private bool _ErrorDetected = false;
             private Result _Result;
@@ -37,16 +36,28 @@ namespace Tavis.UriTemplates
 
             private bool _resolvePartially;
 
-            public UriTemplate(string template, bool resolvePartially = false )
+            public UriTemplate(string template, bool resolvePartially = false, bool caseInsensitiveParameterNames = false)
             {
                 _resolvePartially = resolvePartially;
                 _template = template;
+                _Parameters = caseInsensitiveParameterNames
+                    ? new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase)
+                    : new Dictionary<string, object>();
             }
 
+            public override string ToString()
+            {
+                return _template;
+            }
 
             public void SetParameter(string name, object value)
             {
                 _Parameters[name] = value;
+            }
+
+            public void ClearParameter(string name)
+            {
+                _Parameters.Remove(name);
             }
 
             public void SetParameter(string name, string value)
@@ -293,8 +304,6 @@ namespace Tavis.UriTemplates
                 return true;
             }
 
-
-
             private static bool IsVarNameChar(char c)
             {
                 return ((c >= 'A' && c <= 'z') //Alpha
@@ -303,6 +312,7 @@ namespace Tavis.UriTemplates
                         || c == '%'
                         || c == '.');
             }
+
             private static OperatorInfo GetOperator(char operatorIndicator)
             {
                 OperatorInfo op;

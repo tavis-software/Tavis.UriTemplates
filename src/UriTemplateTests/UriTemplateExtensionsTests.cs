@@ -118,7 +118,7 @@ namespace UriTemplateTests
         }
 
         [Fact]
-        public void TextExtremeEncoding()
+        public void ExtremeEncoding()
         {
             var url = new UriTemplate("http://example.org/sparql{?query}")
                     .AddParameter("query", "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }")
@@ -151,6 +151,20 @@ namespace UriTemplateTests
                 .Resolve();
 
             Assert.Equal("http://example.org/customers?ids=21,75,21&order=up", url);
+        }
+
+        [Fact]
+        public void ApplyParametersObjectWithAListofIntsExploded()
+        {
+            var url = new UriTemplate("http://example.org/customers{?ids*,order}")
+                .AddParameters(new
+                {
+                    order = "up",
+                    ids = new[] { 21, 75, 21 }
+                })
+                .Resolve();
+
+            Assert.Equal("http://example.org/customers?ids=21&ids=75&ids=21&order=up", url);
         }
 
         [Fact]
@@ -258,6 +272,48 @@ namespace UriTemplateTests
                 .Resolve();
 
             Assert.Equal("http://example.org{/folders*}?filename=proposal.pdf", url);
+        }
+
+        [Fact]
+        public void UseArbitraryClassAsParameter()
+        {
+
+
+            var url = new UriTemplate("/{test}", true)
+                .AddParameters(new
+                {
+                    test = new Something()
+                })
+                .Resolve();
+
+            Assert.Equal("/something", url);
+        }
+
+
+        [Fact]
+        public void AddMultipleParametersToLink()
+        {
+            var template = new UriTemplate("http://localhost/api/{dataset}/customer{?foo,bar,baz}");
+
+            template.AddParameters(new Dictionary<string, object>
+            {
+                {"foo", "bar"},
+                {"baz", "99"},
+                {"dataset", "bob"}
+            });
+
+            var uri = template.Resolve();
+
+            Assert.Equal("http://localhost/api/bob/customer?foo=bar&baz=99", uri);
+        }
+
+    }
+
+    class Something
+    {
+        public override string ToString()
+        {
+            return "something";
         }
     }
 }
