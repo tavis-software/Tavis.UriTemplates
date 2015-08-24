@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Tavis.UriTemplates
 {
@@ -336,7 +337,43 @@ namespace Tavis.UriTemplates
                 return op;
             }
 
-        
+            private const string varname = "[a-zA-Z0-9_]*";
+            private const string op = "(?<op>[+#./;?&]?)";
+            private const string var = "(?<var>(?:(?<lvar>" + varname + "[*]?),?)*)";
+            private const string varspec = "(?<varspec>{" + op + var + "})";
+
+            // (?<varspec>{(?<op>[+#./;?&]?)(?<var>[a-zA-Z0-9_]*[*]?|(?:(?<lvar>[a-zA-Z0-9_]*[*]?),?)*)})
+
+
+            public IDictionary<string,object> GetParameters(Uri uri)
+            {
+                var matchingRegex = CreateMatchingRegex();
+
+                // Create regex from Uri
+                var regex = new Regex(matchingRegex);
+
+                var match = regex.Match(uri.AbsoluteUri);
+                var parameters = new Dictionary<string, object>();
+
+                for(int x = 1; x < match.Groups.Count; x ++)
+                {
+                    if (match.Groups[x].Success)
+                    {
+                        parameters.Add(regex.GroupNameFromNumber(x), match.Groups[x].Value);
+                    }
+                }
+                return parameters;
+            }
+
+            public string CreateMatchingRegex()
+            {
+                var findParam = new Regex(varspec);
+                return findParam.Replace(_template, delegate(Match m)
+                {
+                    var y = m.Value.Replace("{","").Replace("}","");
+                    return "(?<"+y+">[^/]+)";
+                });
+            }
         }
 
         
