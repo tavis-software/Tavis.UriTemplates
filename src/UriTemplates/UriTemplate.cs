@@ -339,7 +339,7 @@ namespace Tavis.UriTemplates
 
             private const string varname = "[a-zA-Z0-9_]*";
             private const string op = "(?<op>[+#./;?&]?)";
-            private const string var = "(?<var>(?:(?<lvar>" + varname + "[*]?),?)*)";
+            private const string var = "(?<var>(?:(?<lvar>" + varname + ")[*]?,?)*)";
             private const string varspec = "(?<varspec>{" + op + var + "})";
 
             // (?<varspec>{(?<op>[+#./;?&]?)(?<var>[a-zA-Z0-9_]*[*]?|(?:(?<lvar>[a-zA-Z0-9_]*[*]?),?)*)})
@@ -370,8 +370,31 @@ namespace Tavis.UriTemplates
                 var findParam = new Regex(varspec);
                 return findParam.Replace(_template, delegate(Match m)
                 {
-                    var y = m.Value.Replace("{","").Replace("}","");
-                    return "(?<"+y+">[^/]+)";
+                    var sb = new StringBuilder();
+                    var op = m.Groups["op"].Value;
+                    foreach (var paramname in m.Groups["lvar"].Captures)
+                    {
+                        if (op == "?")
+                        {
+                            sb.Append(@"\?");
+                            sb.Append("(?:");
+                            sb.Append(paramname);
+                            sb.Append("=");
+                        }
+
+                        sb.Append("(?<");
+                        sb.Append(paramname);
+                        sb.Append(">");
+                        sb.Append("[^/?&]+");
+                        if (op == "?")
+                        {
+                            sb.Append(")?");
+                        }
+                        sb.Append(")");
+                        
+                    }
+                    
+                    return sb.ToString();
                 });
             }
         }
