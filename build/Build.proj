@@ -14,8 +14,10 @@
  
   <Target Name="Compile">
 	  <MSBuild Projects="$(BaseDir)\src\UriTemplates\UriTemplates.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net35"  />
+    <MSBuild Projects="$(BaseDir)\src\UriTemplates.net40\UriTemplates.net40.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net40"  />
     <MSBuild Projects="$(BaseDir)\src\UriTemplates.net45\UriTemplates.net45.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net45"  />
 	  <MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\portable-net45+sl5+wp8+win8+wpa81+MonoTouch1+MonoAndroid1"  />
+    <MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\dotnet"  />
   </Target>
  
   <Target Name="Package">
