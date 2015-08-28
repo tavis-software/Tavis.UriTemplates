@@ -7,18 +7,24 @@ namespace Tavis.UriTemplates
 {
     public class Result
     {
-
+        public bool ErrorDetected { get; set; }
+        public List<string> ParameterNames {get;set;}
         private const string _UriReservedSymbols = ":/?#[]@!$&'()*+,;=";
         private const string _UriUnreservedSymbols = "-._~";
 
         private StringBuilder _Result = new StringBuilder();
-            
+
+        public Result()
+        {
+            ParameterNames = new List<string>();
+        }
         public StringBuilder Append(char value)
         {
             return _Result.Append(value);
         }
         public StringBuilder Append(string value)
         {
+
             return _Result.Append(value);
         }
 

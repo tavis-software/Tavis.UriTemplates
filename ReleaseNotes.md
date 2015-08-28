@@ -1,5 +1,8 @@
 # Uri Templates #
-
+##0.6.4
+- Added .net4 version of assembly
+- Updated nuget to put portable lib in dotnet folder to enable coreclr support
+- Made Resolve() thread safe by ensuring it does not share any state from one invocation to the next.
 ##0.6.3
 - Added ToString() overload to allow retreiving unresolved template
 ##0.6.2
