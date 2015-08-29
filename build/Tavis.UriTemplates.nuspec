@@ -13,6 +13,7 @@
             ]]></releaseNotes>
     <projectUrl>https://github.com/tavis-software/Tavis.UriTemplates</projectUrl>
     <dependencies>
+      <group targetFramework="net45" />
       <group targetFramework="dotnet">
         <dependency id="System.Collections" version="4.0.0" />
         <dependency id="System.Linq" version="4.0.0" />
