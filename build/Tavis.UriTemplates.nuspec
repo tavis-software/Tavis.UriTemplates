@@ -1,21 +1,31 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Tavis.UriTemplates</id>
-    <version>0.6.4-rc3</version>
+    <version>0.6.4-rc4</version>
     <authors>Darrel Miller</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	  <title>Tavis.UriTemplates</title>
+    <title>Tavis.UriTemplates</title>
     <description>URI Template resolution library - Implementation of RFC 6570</description>
     <tags>http</tags>
-    <releaseNotes>
-      <![CDATA[
+    <releaseNotes><![CDATA[
             For full release notes see https://github.com/tavis-software/Tavis.UriTemplates/blob/master/ReleaseNotes.md
-            ]]>
-    </releaseNotes>
-	<projectUrl>https://github.com/tavis-software/Tavis.UriTemplates</projectUrl>
-	</metadata>
-    <files>
-        <file src="..\artifacts\lib\**\.*" target="lib" />
-    </files>
+            ]]></releaseNotes>
+    <projectUrl>https://github.com/tavis-software/Tavis.UriTemplates</projectUrl>
+    <dependencies>
+      <group targetFramework="dotnet">
+        <dependency id="System.Collections" version="4.0.0" />
+        <dependency id="System.Linq" version="4.0.0" />
+        <dependency id="System.Reflection" version="4.0.0" />
+        <dependency id="System.Resources.ResourceManager" version="4.0.0" />
+        <dependency id="System.Runtime" version="4.0.0" />
+        <dependency id="System.Runtime.Extensions" version="4.0.0" />
+        <dependency id="System.Text.Encoding" version="4.0.0" />
+        <dependency id="System.Text.RegularExpressions" version="4.0.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\artifacts\lib\**\.*" target="lib" />
+  </files>
 </package>
