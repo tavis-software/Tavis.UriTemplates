@@ -31,11 +31,9 @@ namespace Tavis.UriTemplates
             private readonly string _template;
             private readonly Dictionary<string, object> _Parameters;
             private enum States { CopyingLiterals, ParsingExpression }
-            private bool _ErrorDetected = false;
-            private Result _Result;
-            private List<string> _ParameterNames;
+            
 
-            private bool _resolvePartially;
+            private readonly bool _resolvePartially;
 
             public UriTemplate(string template, bool resolvePartially = false, bool caseInsensitiveParameterNames = false)
             {
@@ -78,17 +76,20 @@ namespace Tavis.UriTemplates
 
             public IEnumerable<string> GetParameterNames()
             {
-                var parameterNames = new List<string>();
-                _ParameterNames = parameterNames;
-                Resolve();
-                _ParameterNames = null;
-                return parameterNames;
+                Result result = ResolveResult();
+                return result.ParameterNames;
             }
 
             public string Resolve()
             {
+                var result = ResolveResult();
+                return result.ToString();
+            }
+
+            private Result ResolveResult()
+            {
                 var currentState = States.CopyingLiterals;
-                _Result = new Result();
+                var result = new Result();
                 StringBuilder currentExpression = null;
                 foreach (var character in _template.ToCharArray())
                 {
@@ -102,17 +103,17 @@ namespace Tavis.UriTemplates
                             }
                             else if (character == '}')
                             {
-                                throw new ArgumentException("Malformed template, unexpected } : " + _Result.ToString());
+                                throw new ArgumentException("Malformed template, unexpected } : " + result.ToString());
                             }
                             else
                             {
-                                _Result.Append(character);
+                                result.Append(character);
                             }
                             break;
                         case States.ParsingExpression:
                             if (character == '}')
                             {
-                                ProcessExpression(currentExpression);
+                                ProcessExpression(currentExpression, result);
 
                                 currentState = States.CopyingLiterals;
                             }
@@ -126,26 +127,26 @@ namespace Tavis.UriTemplates
                 }
                 if (currentState == States.ParsingExpression)
                 {
-                    _Result.Append("{");
-                    _Result.Append(currentExpression.ToString());
+                    result.Append("{");
+                    result.Append(currentExpression.ToString());
 
-                    throw new ArgumentException("Malformed template, missing } : " + _Result.ToString());
+                    throw new ArgumentException("Malformed template, missing } : " + result.ToString());
                 }
 
-                if (_ErrorDetected)
+                if (result.ErrorDetected)
                 {
-                    throw new ArgumentException("Malformed template : " + _Result.ToString());
+                    throw new ArgumentException("Malformed template : " + result.ToString());
                 }
-                return _Result.ToString();
+                return result;
             }
 
-            private void ProcessExpression(StringBuilder currentExpression)
+            private void ProcessExpression(StringBuilder currentExpression, Result result)
             {
 
                 if (currentExpression.Length == 0)
                 {
-                    _ErrorDetected = true;
-                    _Result.Append("{}");
+                    result.ErrorDetected = true;
+                    result.Append("{}");
                     return;
                 }
 
@@ -179,12 +180,12 @@ namespace Tavis.UriTemplates
 
                         case ',':
                             multivariableExpression = true;
-                            var success = ProcessVariable(varSpec, multivariableExpression);
+                            var success = ProcessVariable(varSpec, result, multivariableExpression);
                             bool isFirst = varSpec.First;
                             // Reset for new variable
                             varSpec = new VarSpec(op);
                             if (success || !isFirst || _resolvePartially) varSpec.First = false;
-                            if (!success && _resolvePartially) {_Result.Append(",") ; }
+                            if (!success && _resolvePartially) {result.Append(",") ; }
                             break; 
                         
 
@@ -195,20 +196,20 @@ namespace Tavis.UriTemplates
                             }
                             else
                             {
-                                _ErrorDetected = true;
+                                result.ErrorDetected = true;
                             }
                             break;
                     }
                 }
 
-                ProcessVariable(varSpec, multivariableExpression);
-                if (multivariableExpression && _resolvePartially) _Result.Append("}");
+                ProcessVariable(varSpec, result, multivariableExpression);
+                if (multivariableExpression && _resolvePartially) result.Append("}");
             }
 
-            private bool ProcessVariable(VarSpec varSpec, bool multiVariableExpression = false)
+            private bool ProcessVariable(VarSpec varSpec, Result result, bool multiVariableExpression = false)
             {
                 var varname = varSpec.VarName.ToString();
-                if (_ParameterNames != null) _ParameterNames.Add(varname);
+                result.ParameterNames.Add(varname);
 
                 if (!_Parameters.ContainsKey(varname)
                     || _Parameters[varname] == null
@@ -221,16 +222,16 @@ namespace Tavis.UriTemplates
                         {
                             if (varSpec.First)
                             {
-                                _Result.Append("{");
+                                result.Append("{");
                             }
 
-                            _Result.Append(varSpec.ToString());
+                            result.Append(varSpec.ToString());
                         }
                         else
                         {
-                            _Result.Append("{");
-                            _Result.Append(varSpec.ToString());
-                            _Result.Append("}");
+                            result.Append("{");
+                            result.Append(varSpec.ToString());
+                            result.Append("}");
                         }
                         return false;
                     }
@@ -239,11 +240,11 @@ namespace Tavis.UriTemplates
 
                 if (varSpec.First)
                 {
-                    _Result.Append(varSpec.OperatorInfo.First);
+                    result.Append(varSpec.OperatorInfo.First);
                 }
                 else
                 {
-                    _Result.Append(varSpec.OperatorInfo.Seperator);
+                    result.Append(varSpec.OperatorInfo.Seperator);
                 }
 
                 object value = _Parameters[varname];
@@ -254,9 +255,9 @@ namespace Tavis.UriTemplates
                     var stringValue = (string)value;
                     if (varSpec.OperatorInfo.Named)
                     {
-                        _Result.AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                        result.AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
                     }
-                    _Result.AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
+                    result.AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
                 }
                 else
                 {
@@ -270,10 +271,10 @@ namespace Tavis.UriTemplates
                     {
                         if (varSpec.OperatorInfo.Named && !varSpec.Explode)  // exploding will prefix with list name
                         {
-                            _Result.AppendName(varname, varSpec.OperatorInfo, list.Count == 0);
+                            result.AppendName(varname, varSpec.OperatorInfo, list.Count == 0);
                         }
 
-                        _Result.AppendList(varSpec.OperatorInfo, varSpec.Explode, varname, list);
+                        result.AppendList(varSpec.OperatorInfo, varSpec.Explode, varname, list);
                     }
                     else
                     {
@@ -284,9 +285,9 @@ namespace Tavis.UriTemplates
                         {
                             if (varSpec.OperatorInfo.Named && !varSpec.Explode)  // exploding will prefix with list name
                             {
-                                _Result.AppendName(varname, varSpec.OperatorInfo, dictionary.Count() == 0);
+                                result.AppendName(varname, varSpec.OperatorInfo, dictionary.Count() == 0);
                             }
-                            _Result.AppendDictionary(varSpec.OperatorInfo, varSpec.Explode, dictionary);
+                            result.AppendDictionary(varSpec.OperatorInfo, varSpec.Explode, dictionary);
                         }
                         else
                         {
@@ -294,9 +295,9 @@ namespace Tavis.UriTemplates
                             var stringValue = value.ToString();
                             if (varSpec.OperatorInfo.Named)
                             {
-                                _Result.AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                                result.AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
                             }
-                            _Result.AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
+                            result.AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
                         }
 
                     }
