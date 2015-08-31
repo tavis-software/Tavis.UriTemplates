@@ -20,8 +20,15 @@ namespace Tavis.UriTemplates
 
             if (parametersObject != null)
             {
-                var type = parametersObject.GetType();
-                foreach (var propinfo in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                IEnumerable<PropertyInfo> properties;
+#if Profile259
+                var type = parametersObject.GetType().GetTypeInfo();
+                properties = type.DeclaredProperties.Where(p=> p.CanRead);
+#else
+                properties = parametersObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+#endif
+
+                foreach (var propinfo in properties)
                 {
                     template.SetParameter(propinfo.Name, propinfo.GetValue(parametersObject, null));
                 }
