@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Tavis.UriTemplates;
 using Xunit;
+using Xunit.Extensions;
 
 namespace UriTemplateTests
 {
@@ -98,6 +99,39 @@ namespace UriTemplateTests
             Assert.Equal("23", parameters["blob"]);
 
         }
+
+        [Fact]
+        public void GetParametersFromMultipleQueryStringWithOptionalAndMandatoryParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blur=45&blob=23");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur}{&blob}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("45", parameters["blur"]);
+            Assert.Equal("23", parameters["blob"]);
+
+        }
+
+        [Fact]
+        public void TestGlimpseUrl()
+        {
+            var uri = new Uri("http://example.com/Glimpse.axd?n=glimpse_ajax&parentRequestId=123232323&hash=23ADE34FAE&callback=http%3A%2F%2Fexample.com%2Fcallback");
+
+            var template = new UriTemplate("http://example.com/Glimpse.axd?n=glimpse_ajax&parentRequestId={parentRequestId}{&hash,callback}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("123232323", parameters["parentRequestId"]);
+            Assert.Equal("23ADE34FAE", parameters["hash"]);
+            Assert.Equal("http%3A%2F%2Fexample.com%2Fcallback", parameters["callback"]);
+
+        }
+
+       
 
     }
 }

@@ -1,4 +1,6 @@
 # Uri Templates #
+##0.6.5
+- Parameter matching
 ##0.6.4
 - Added .net4 version of assembly
 - Updated nuget to put portable lib in dotnet folder to enable coreclr support

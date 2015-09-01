@@ -356,7 +356,7 @@ namespace Tavis.UriTemplates
                 var match = regex.Match(uri.AbsoluteUri);
                 var parameters = new Dictionary<string, object>();
 
-                for(int x = 1; x < match.Groups.Count; x ++)
+                for(int x = 0; x < match.Groups.Count; x ++)
                 {
                     if (match.Groups[x].Success)
                     {
@@ -369,35 +369,75 @@ namespace Tavis.UriTemplates
             public string CreateMatchingRegex()
             {
                 var findParam = new Regex(varspec);
-                return findParam.Replace(_template, delegate(Match m)
-                {
-                    var sb = new StringBuilder();
-                    var op = m.Groups["op"].Value;
-                    foreach (var paramname in m.Groups["lvar"].Captures)
-                    {
-                        if (op == "?")
-                        {
-                            sb.Append(@"\?");
-                            sb.Append("(?:");
-                            sb.Append(paramname);
-                            sb.Append("=");
-                        }
 
-                        sb.Append("(?<");
-                        sb.Append(paramname);
-                        sb.Append(">");
-                        sb.Append("[^/?&]+");
-                        if (op == "?")
-                        {
-                            sb.Append(")?");
-                        }
-                        sb.Append(")");
-                        
+                var template = new Regex(@"([^{])\?").Replace(_template, @"$+\?"); ;//.Replace("?",@"\?");
+                return findParam.Replace(template, delegate(Match m)
+                {
+                    var paramNames = m.Groups["lvar"].Captures.Cast<Capture>().Where(c => !string.IsNullOrEmpty(c.Value)).Select(c => c.Value).ToList();
+                    var op = m.Groups["op"].Value;
+                    switch (op)
+                    {
+                        case "?":
+                            return GetQueryExpression(paramNames);
+                        case "&":
+                            return GetQueryExpression(paramNames, firstParam: false);
+                        default:
+                            return GetExpression(paramNames);
                     }
                     
-                    return sb.ToString();
                 });
             }
+
+            private static string GetQueryExpression(List<String> paramNames, bool firstParam = true)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (var paramname in paramNames)
+                {
+
+                    if (firstParam)
+                    {
+                        sb.Append(@"\?");
+                        firstParam = false;
+                    }
+                    else
+                    {
+                        sb.Append(@"\&?");
+                    }
+                    sb.Append("(?:");
+                    sb.Append(paramname);
+                    sb.Append("=");
+  
+                    sb.Append("(?<");
+                    sb.Append(paramname);
+                    sb.Append(">");
+                    sb.Append("[^/?&]+");
+                    sb.Append(")");
+                    sb.Append(")?");
+                }
+
+                return sb.ToString();
+            }
+
+
+            private static string GetExpression(List<String> paramNames)
+            {
+                StringBuilder sb = new StringBuilder();
+
+                foreach (var paramname in paramNames)
+                {
+                    if (string.IsNullOrEmpty(paramname)) continue;
+
+                    sb.Append("(?<");
+                    sb.Append(paramname);
+                    sb.Append(">");
+                    sb.Append("[^/?&]+"); // Param Value
+                    sb.Append(")?");
+                }
+
+                return sb.ToString();
+            }
+
+          
         }
 
         
