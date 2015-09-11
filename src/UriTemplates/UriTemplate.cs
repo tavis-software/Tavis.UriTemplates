@@ -345,32 +345,37 @@ namespace Tavis.UriTemplates
 
             // (?<varspec>{(?<op>[+#./;?&]?)(?<var>[a-zA-Z0-9_]*[*]?|(?:(?<lvar>[a-zA-Z0-9_]*[*]?),?)*)})
 
+            private Regex _ParameterRegex = null;
 
             public IDictionary<string,object> GetParameters(Uri uri)
             {
-                var matchingRegex = CreateMatchingRegex();
+                if (_ParameterRegex == null)
+                {
+                    var matchingRegex = CreateMatchingRegex(_template);
+                    lock (this)
+                    {
+                        _ParameterRegex = new Regex(matchingRegex);
+                    }
+                }
 
-                // Create regex from Uri
-                var regex = new Regex(matchingRegex);
-
-                var match = regex.Match(uri.AbsoluteUri);
+                var match = _ParameterRegex.Match(uri.AbsoluteUri);
                 var parameters = new Dictionary<string, object>();
 
                 for(int x = 0; x < match.Groups.Count; x ++)
                 {
                     if (match.Groups[x].Success)
                     {
-                        parameters.Add(regex.GroupNameFromNumber(x), match.Groups[x].Value);
+                        parameters.Add(_ParameterRegex.GroupNameFromNumber(x), match.Groups[x].Value);
                     }
                 }
                 return parameters;
             }
 
-            public string CreateMatchingRegex()
+            public static string CreateMatchingRegex(string uriTemplate)
             {
                 var findParam = new Regex(varspec);
 
-                var template = new Regex(@"([^{])\?").Replace(_template, @"$+\?"); ;//.Replace("?",@"\?");
+                var template = new Regex(@"([^{])\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
                 return findParam.Replace(template, delegate(Match m)
                 {
                     var paramNames = m.Groups["lvar"].Captures.Cast<Capture>().Where(c => !string.IsNullOrEmpty(c.Value)).Select(c => c.Value).ToList();

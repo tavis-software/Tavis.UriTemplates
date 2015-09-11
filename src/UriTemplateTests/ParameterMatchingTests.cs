@@ -19,9 +19,8 @@ namespace UriTemplateTests
             var uri = new Uri("http://example.com/foo/bar");
 
             var sTemplate = "http://example.com/{p1}/{p2}";
-            var template = new UriTemplate(sTemplate);
 
-            var x = template.CreateMatchingRegex();
+            var x = UriTemplate.CreateMatchingRegex(sTemplate);
 
             var match = Regex.IsMatch(uri.AbsoluteUri,x);
             Assert.True(match);
@@ -32,9 +31,9 @@ namespace UriTemplateTests
         {
             var uri = new Uri("http://example.com/foo/bar");
 
-            var template = new UriTemplate("http://example.com/{p1}/{p2}");
+            var sTemplate = "http://example.com/{p1}/{p2}";
 
-            var x = template.CreateMatchingRegex();
+            var x = UriTemplate.CreateMatchingRegex(sTemplate);
             var regex = new Regex(x);
 
             var match = regex.Match(uri.AbsoluteUri);
@@ -131,7 +130,21 @@ namespace UriTemplateTests
 
         }
 
-       
+        [Fact]
+        public void SimplePerfTest()
+        {
+            var uri = new Uri("http://example.com/Glimpse.axd?n=glimpse_ajax&parentRequestId=123232323&hash=23ADE34FAE&callback=http%3A%2F%2Fexample.com%2Fcallback");
+
+            var template = new UriTemplate("http://example.com/Glimpse.axd?n=glimpse_ajax&parentRequestId={parentRequestId}{&hash,callback}");
+
+            for (int i = 0; i < 100000; i++)
+            {
+                var parameters = template.GetParameters(uri);
+                
+            }
+
+
+        }
 
     }
 }
