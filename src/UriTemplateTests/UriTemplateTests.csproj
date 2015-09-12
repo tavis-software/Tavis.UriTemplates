@@ -84,6 +84,7 @@
     <Compile Include="SpecTests.cs" />
     <Compile Include="UriExtensionTests.cs" />
     <Compile Include="UriTemplateExtensionsTests.cs" />
+    <Compile Include="UriTemplateTableTests.cs" />
     <Compile Include="UsageTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -358,7 +358,7 @@ namespace Tavis.UriTemplates
                     }
                 }
 
-                var match = _ParameterRegex.Match(uri.AbsoluteUri);
+                var match = _ParameterRegex.Match(uri.OriginalString);
                 var parameters = new Dictionary<string, object>();
 
                 for(int x = 0; x < match.Groups.Count; x ++)
@@ -368,7 +368,7 @@ namespace Tavis.UriTemplates
                         parameters.Add(_ParameterRegex.GroupNameFromNumber(x), match.Groups[x].Value);
                     }
                 }
-                return parameters;
+                return match.Success ? parameters : null;
             }
 
             public static string CreateMatchingRegex(string uriTemplate)
@@ -376,7 +376,7 @@ namespace Tavis.UriTemplates
                 var findParam = new Regex(varspec);
 
                 var template = new Regex(@"([^{])\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
-                return findParam.Replace(template, delegate(Match m)
+                var regex = findParam.Replace(template, delegate(Match m)
                 {
                     var paramNames = m.Groups["lvar"].Captures.Cast<Capture>().Where(c => !string.IsNullOrEmpty(c.Value)).Select(c => c.Value).ToList();
                     var op = m.Groups["op"].Value;
@@ -391,6 +391,8 @@ namespace Tavis.UriTemplates
                     }
                     
                 });
+
+                return regex +"$";
             }
 
             private static string GetQueryExpression(List<String> paramNames, bool firstParam = true)
