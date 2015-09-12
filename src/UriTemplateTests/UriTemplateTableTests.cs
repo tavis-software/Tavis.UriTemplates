@@ -24,7 +24,7 @@ namespace UriTemplateTests
         InlineData("/glah/flid/blob", "goo")]
         public void FindPathTemplates(string url, string key)
         {
-            var table = new UriTemplateTable();
+            var table = new UriTemplateTable();  // Shorter paths and literal path segments should be added to the table first.
             table.Add("root", new UriTemplate("/"));
             table.Add("foo", new UriTemplate("/foo/{bar}"));
             table.Add("kit", new UriTemplate("/baz/kit"));
@@ -83,7 +83,7 @@ namespace UriTemplateTests
     ]
         public void FindTemplatesWithQueryStrings(string url, string key)
         {
-            var table = new UriTemplateTable();
+            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
             table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
             table.Add("fooxy2", new UriTemplate("/foo?x={x}{&y}"));
             table.Add("fooxy", new UriTemplate("/foo{?x,y}"));
