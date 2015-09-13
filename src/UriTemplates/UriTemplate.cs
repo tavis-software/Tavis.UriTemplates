@@ -403,7 +403,7 @@ namespace Tavis.UriTemplates
 
                     if (firstParam)
                     {
-                        sb.Append(@"\?");
+                        sb.Append(@"\??");
                         firstParam = false;
                     }
                     else

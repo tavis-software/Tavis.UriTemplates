@@ -116,6 +116,21 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void GetParametersFromMultipleQueryStringWithOptionalParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+
+        }
+
+
+        [Fact]
         public void TestGlimpseUrl()
         {
             var uri = new Uri("http://example.com/Glimpse.axd?n=glimpse_ajax&parentRequestId=123232323&hash=23ADE34FAE&callback=http%3A%2F%2Fexample.com%2Fcallback");

@@ -86,6 +86,7 @@ namespace UriTemplateTests
             var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
             table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
             table.Add("fooxy2", new UriTemplate("/foo?x={x}{&y}"));
+            table.Add("fooxy4", new UriTemplate("/foo?x={x}{&z}"));
             table.Add("fooxy", new UriTemplate("/foo{?x,y}"));
             table.Add("foo", new UriTemplate("/foo"));
  
