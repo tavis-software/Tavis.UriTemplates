@@ -365,7 +365,7 @@ namespace Tavis.UriTemplates
                 {
                     if (match.Groups[x].Success)
                     {
-                        parameters.Add(_ParameterRegex.GroupNameFromNumber(x), match.Groups[x].Value);
+                        parameters.Add(_ParameterRegex.GroupNameFromNumber(x), Uri.UnescapeDataString(match.Groups[x].Value));
                     }
                 }
                 return match.Success ? parameters : null;
@@ -383,9 +383,16 @@ namespace Tavis.UriTemplates
                     switch (op)
                     {
                         case "?":
-                            return GetQueryExpression(paramNames);
+                            return GetQueryExpression(paramNames, prefix: "?");
                         case "&":
-                            return GetQueryExpression(paramNames, firstParam: false);
+                            return GetQueryExpression(paramNames, prefix: "&");
+                        case "#":
+                            return GetExpression(paramNames, prefix: "#" );
+                        case "/":
+                            return GetExpression(paramNames, prefix: "/");
+
+                        case "+":
+                            return GetExpression(paramNames);
                         default:
                             return GetExpression(paramNames);
                     }
@@ -395,21 +402,15 @@ namespace Tavis.UriTemplates
                 return regex +"$";
             }
 
-            private static string GetQueryExpression(List<String> paramNames, bool firstParam = true)
+            private static string GetQueryExpression(List<String> paramNames, string prefix)
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (var paramname in paramNames)
                 {
 
-                    if (firstParam)
-                    {
-                        sb.Append(@"\??");
-                        firstParam = false;
-                    }
-                    else
-                    {
-                        sb.Append(@"\&?");
-                    }
+                    sb.Append(@"\"+prefix+"?");
+                    if (prefix == "?") prefix = "&";
+
                     sb.Append("(?:");
                     sb.Append(paramname);
                     sb.Append("=");
@@ -426,7 +427,7 @@ namespace Tavis.UriTemplates
             }
 
 
-            private static string GetExpression(List<String> paramNames)
+            private static string GetExpression(List<String> paramNames, string prefix = null)
             {
                 StringBuilder sb = new StringBuilder();
 
@@ -434,10 +435,15 @@ namespace Tavis.UriTemplates
                 {
                     if (string.IsNullOrEmpty(paramname)) continue;
 
+                    if (prefix != null)
+                    {
+                        sb.Append(@"\" + prefix + "?");
+                        prefix = ",";
+                    }
                     sb.Append("(?<");
                     sb.Append(paramname);
                     sb.Append(">");
-                    sb.Append("[^/?&]+"); // Param Value
+                    sb.Append("[^/?&,]+"); // Param Value
                     sb.Append(")?");
                 }
 
