@@ -361,11 +361,15 @@ namespace Tavis.UriTemplates
                 var match = _ParameterRegex.Match(uri.AbsoluteUri);
                 var parameters = new Dictionary<string, object>();
 
-                for(int x = 0; x < match.Groups.Count; x ++)
+                for(int x = 1; x < match.Groups.Count; x ++)
                 {
                     if (match.Groups[x].Success)
                     {
-                        parameters.Add(_ParameterRegex.GroupNameFromNumber(x), match.Groups[x].Value);
+                        var paramName = _ParameterRegex.GroupNameFromNumber(x);
+                        if (!string.IsNullOrEmpty(paramName))
+                        {
+                            parameters.Add(paramName, match.Groups[x].Value);
+                        }
                     }
                 }
                 return parameters;
