@@ -379,7 +379,7 @@ namespace Tavis.UriTemplates
             {
                 var findParam = new Regex(varspec);
 
-                var template = new Regex(@"([^{])\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
+                var template = new Regex(@"([^{]|^)\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
                 return findParam.Replace(template, delegate(Match m)
                 {
                     var paramNames = m.Groups["lvar"].Captures.Cast<Capture>().Where(c => !string.IsNullOrEmpty(c.Value)).Select(c => c.Value).ToList();

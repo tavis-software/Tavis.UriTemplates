@@ -138,6 +138,19 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void TestUrlWithQuestionMarkAsFirstCharacter()
+        {
+
+            var parameters = new UriTemplate("?hash={hash}").GetParameters(new Uri("http://localhost:5000/glimpse/metadata?hash=123"));;
+
+            Assert.Equal(1, parameters.Count);
+            Assert.Equal("123", parameters["hash"]);
+
+        }
+
+        
+
+        [Fact]
         public void TestExactParameterCount()
         {
             var uri = new Uri("http://example.com/foo?bar=10");
