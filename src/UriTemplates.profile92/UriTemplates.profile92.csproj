@@ -34,12 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <None Include="..\UriTemplates\project.json">
-      <Link>project.json</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\UriTemplates\OperatorInfo.cs">
       <Link>OperatorInfo.cs</Link>
     </Compile>
