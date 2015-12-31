@@ -13,13 +13,14 @@
   <Target Name="default" DependsOnTargets="Compile; Package" />
  
   <Target Name="Compile">
+  <MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" Properties="Configuration=$(		Configuration);OutputPath=$(ArtifactsDir)\lib\dotnet5.1"  />
+  
 	  <MSBuild Projects="$(BaseDir)\src\UriTemplates\UriTemplates.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net35"  />
     <MSBuild Projects="$(BaseDir)\src\UriTemplates.net40\UriTemplates.net40.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net40"  />
    
     <MSBuild Projects="$(BaseDir)\src\UriTemplates.net45\UriTemplates.net45.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net45"  />
 	  <MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\portable-net45+netcore45+wpa81+wp8"  />
 
-    <MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\dotnet5.1;DefineConstants=DOTNET5_1"  />
   
     <MSBuild Projects="$(BaseDir)\src\UriTemplates.Profile92\UriTemplates.Profile92.csproj" Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\portable-net4+netcore45+wpa81"  />
     </Target>
