@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Tavis.UriTemplates;
 using Xunit;
-using Xunit.Extensions;
+
 
 namespace UriTemplateTests
 {
