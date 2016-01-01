@@ -122,6 +122,21 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void GetParametersFromMultipleQueryStringWithOptionalParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+
+        }
+
+
+        [Fact]
         public void TestGlimpseUrl()
         {
             var uri = new Uri("http://example.com/Glimpse.axd?n=glimpse_ajax&parentRequestId=123232323&hash=23ADE34FAE&callback=http%3A%2F%2Fexample.com%2Fcallback");
@@ -133,7 +148,7 @@ namespace UriTemplateTests
             Assert.Equal(3, parameters.Count);
             Assert.Equal("123232323", parameters["parentRequestId"]);
             Assert.Equal("23ADE34FAE", parameters["hash"]);
-            Assert.Equal("http%3A%2F%2Fexample.com%2Fcallback", parameters["callback"]);
+            Assert.Equal("http://example.com/callback", parameters["callback"]);
 
         }
 
@@ -178,6 +193,89 @@ namespace UriTemplateTests
 
 
         }
+
+
+        [Fact]
+        public void Level1Decode()
+        {
+            var uri = new Uri("/Hello%20World", UriKind.RelativeOrAbsolute);
+
+            var template = new UriTemplate("/{p1}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("Hello World", parameters["p1"]);
+
+        }
+
+
+        //[Fact]
+        //public void Level2Decode()
+        //{
+        //    var uri = new Uri("/foo?path=Hello/World", UriKind.RelativeOrAbsolute);
+
+        //    var template = new UriTemplate("/foo?path={+p1}");
+
+        //    var parameters = template.GetParameters(uri);
+
+        //    Assert.Equal("Hello/World", parameters["p1"]);
+
+        //}
+
+        [Fact]
+        public void FragmentParam()
+        {
+            var uri = new Uri("/foo#Hello%20World!", UriKind.RelativeOrAbsolute);
+
+            var template = new UriTemplate("/foo{#p1}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("Hello World!", parameters["p1"]);
+
+        }
+
+
+        [Fact]
+        public void FragmentParams()
+        {
+            var uri = new Uri("/foo#Hello%20World!,blurg", UriKind.RelativeOrAbsolute);
+
+            var template = new UriTemplate("/foo{#p1,p2}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("Hello World!", parameters["p1"]);
+            Assert.Equal("blurg", parameters["p2"]);
+
+        }
+
+        [Fact]
+        public void OptionalPathParam()
+        {
+            var uri = new Uri("/foo/yuck/bob", UriKind.RelativeOrAbsolute);
+
+            var template = new UriTemplate("/foo{/bar}/bob");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("yuck", parameters["bar"]);
+
+        }
+
+        [Fact]
+        public void OptionalPathParamWithMultipleValues()
+        {
+            var uri = new Uri("/foo/yuck,yob/bob", UriKind.RelativeOrAbsolute);
+
+            var template = new UriTemplate("/foo{/bar,baz}/bob");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal("yuck", parameters["bar"]);
+            Assert.Equal("yob", parameters["baz"]);
+        }
+
 
     }
 }

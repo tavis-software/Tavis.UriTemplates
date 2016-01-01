@@ -12,7 +12,7 @@ namespace UriTemplateTests
     public class UriTemplateTests2
     {
 
-        [Theory, PropertyData("SpecSamples")]
+        [Theory, MemberData("SpecSamples")]
         public void SpecSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -29,7 +29,7 @@ namespace UriTemplateTests
         }
 
 
-        [Theory, PropertyData("ExtendedSamples")]
+        [Theory, MemberData("ExtendedSamples")]
         public void ExtendedSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
