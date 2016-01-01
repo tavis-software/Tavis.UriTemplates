@@ -361,11 +361,16 @@ namespace Tavis.UriTemplates
                 var match = _ParameterRegex.Match(uri.OriginalString);
                 var parameters = new Dictionary<string, object>();
 
-                for(int x = 0; x < match.Groups.Count; x ++)
+                for(int x = 1; x < match.Groups.Count; x ++)
                 {
                     if (match.Groups[x].Success)
                     {
-                        parameters.Add(_ParameterRegex.GroupNameFromNumber(x), Uri.UnescapeDataString(match.Groups[x].Value));
+                        var paramName = _ParameterRegex.GroupNameFromNumber(x);
+                        if (!string.IsNullOrEmpty(paramName))
+                        {
+                            parameters.Add(paramName, Uri.UnescapeDataString(match.Groups[x].Value));
+                        }
+
                     }
                 }
                 return match.Success ? parameters : null;
@@ -375,8 +380,8 @@ namespace Tavis.UriTemplates
             {
                 var findParam = new Regex(varspec);
 
-                var template = new Regex(@"([^{])\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
-                var regex = findParam.Replace(template, delegate(Match m)
+                var template = new Regex(@"([^{]|^)\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
+                var regex = findParam.Replace(template, delegate (Match m)
                 {
                     var paramNames = m.Groups["lvar"].Captures.Cast<Capture>().Where(c => !string.IsNullOrEmpty(c.Value)).Select(c => c.Value).ToList();
                     var op = m.Groups["op"].Value;

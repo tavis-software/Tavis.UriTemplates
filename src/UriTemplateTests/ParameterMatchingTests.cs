@@ -50,7 +50,8 @@ namespace UriTemplateTests
             var template = new UriTemplate("http://example.com/{+p1}/{p2*}");
 
             var parameters = template.GetParameters(uri);
-            
+
+            Assert.Equal(2, parameters.Count);
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
         }
@@ -63,6 +64,8 @@ namespace UriTemplateTests
             var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur}");
 
             var parameters = template.GetParameters(uri);
+
+            Assert.Equal(3, parameters.Count);
 
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
@@ -78,6 +81,7 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
+            Assert.Equal(3, parameters.Count);
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
             Assert.Equal("45", parameters["blur"]);
@@ -92,6 +96,7 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
+            Assert.Equal(4, parameters.Count);
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
             Assert.Equal("45", parameters["blur"]);
@@ -108,6 +113,7 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
+            Assert.Equal(4, parameters.Count);
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
             Assert.Equal("45", parameters["blur"]);
@@ -139,9 +145,36 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
+            Assert.Equal(3, parameters.Count);
             Assert.Equal("123232323", parameters["parentRequestId"]);
             Assert.Equal("23ADE34FAE", parameters["hash"]);
             Assert.Equal("http://example.com/callback", parameters["callback"]);
+
+        }
+
+        [Fact]
+        public void TestUrlWithQuestionMarkAsFirstCharacter()
+        {
+
+            var parameters = new UriTemplate("?hash={hash}").GetParameters(new Uri("http://localhost:5000/glimpse/metadata?hash=123"));;
+
+            Assert.Equal(1, parameters.Count);
+            Assert.Equal("123", parameters["hash"]);
+
+        }
+
+        
+
+        [Fact]
+        public void TestExactParameterCount()
+        {
+            var uri = new Uri("http://example.com/foo?bar=10");
+
+            var template = new UriTemplate("http://example.com/foo{?bar}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal(1, parameters.Count);
 
         }
 

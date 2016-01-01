@@ -40,3 +40,4 @@ packages
 artifacts
 *.nupkg
 publish-tavis*.ps1
+src/UriTemplates/project.lock.json
