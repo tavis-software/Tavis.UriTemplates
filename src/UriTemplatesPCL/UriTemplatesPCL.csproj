@@ -53,6 +53,9 @@
     <Compile Include="..\UriTemplates\UriTemplateExtensions.cs">
       <Link>UriTemplateExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\UriTemplates\UriTemplateTable.cs">
+      <Link>UriTemplateTable.cs</Link>
+    </Compile>
     <Compile Include="..\UriTemplates\VarSpec.cs">
       <Link>VarSpec.cs</Link>
     </Compile>

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Tavis.UriTemplates</id>
-    <version>0.6.6-beta3</version>
+    <version>0.6.6-beta4</version>
     <authors>Darrel Miller</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <title>Tavis.UriTemplates</title>
