@@ -43,6 +43,9 @@ namespace UriTemplateTests
             {
                 Assert.Equal(key, result.Key);
             }
+
+            Assert.NotNull(table["goo"]);
+            Assert.Null(table["goo1"]);
         }
 
         [Theory,
