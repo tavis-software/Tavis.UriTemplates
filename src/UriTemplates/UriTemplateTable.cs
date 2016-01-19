@@ -27,6 +27,17 @@ namespace Tavis.UriTemplates
             return null;
         }
 
+        public UriTemplate this[string key]
+        { get
+            {
+                UriTemplate value;
+                if (_Templates.TryGetValue(key, out value))
+                {
+                    return value;
+                } else {
+                    return null;
+                }
+            }
 
     }
 
