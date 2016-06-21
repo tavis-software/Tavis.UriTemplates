@@ -87,6 +87,7 @@ namespace UriTemplateTests
             Assert.Equal("45", parameters["blur"]);
 
         }
+
         [Fact]
         public void GetParametersFromMultipleQueryStringWithTwoParamValues()
         {
@@ -96,6 +97,24 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
+            Assert.Equal(4, parameters.Count);
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("45", parameters["blur"]);
+            Assert.Equal("23", parameters["blob"]);
+
+        }
+
+        [Fact]
+        public void GetParametersFromMultipleQueryStringWithTwoParamValuesDoesNotDependOnOrderOfQueryParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blob=23&blur=45");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.NotNull(parameters);
             Assert.Equal(4, parameters.Count);
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
