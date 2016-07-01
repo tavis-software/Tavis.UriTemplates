@@ -393,6 +393,11 @@ namespace Tavis.UriTemplates
         /// <returns>A dictionary containing URI template parameters and their values.</returns>
         public IDictionary<string, object> GetParametersNonStrict(Uri uri)
         {
+            if (string.IsNullOrEmpty(uri.Query))
+            {
+                return GetParameters(uri) ?? new Dictionary<string, object>();
+            }
+
             // Note that the search for parameters independent of order can also be done using regex, but will not perform well.
 
             var uriWithoutQuery = new Uri(uri.ToString().Replace(uri.Query, ""), UriKind.RelativeOrAbsolute);
