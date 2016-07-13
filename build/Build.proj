@@ -37,6 +37,6 @@
  
   <Target Name="Package">
       <Exec WorkingDirectory="$(BuildDir)" 
-            Command="c:\bin\nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec -OutputDirectory $(ArtifactsDir) " />
+            Command="nuget.exe pack $(BuildDir)\Tavis.$(Project).nuspec -OutputDirectory $(ArtifactsDir) " />
   </Target>
 </Project>
