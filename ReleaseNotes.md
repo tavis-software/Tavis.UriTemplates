@@ -1,5 +1,7 @@
 # Uri Templates #
 
+##1.1.0
+Updated Target Framework Moniker from dotnet to netstandard1.0
 
 ##1.0.0
 This project has lived too long as a 0.x release.  I believe it has seen enough production use to be considered a 1.0 release.
