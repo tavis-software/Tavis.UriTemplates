@@ -223,6 +223,8 @@ namespace UriTemplateTests
             template.SetParameter("query", "1234");
             template.SetParameter("per_page", "19");
             var result = template.Resolve();
+
+            Assert.Equal("https://api.github.com/search/code?q=1234&per_page=19", result);
         }
 
 
