@@ -66,6 +66,16 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void ShouldAllowPartialUriTemplateWithQueryParamsButNoValues()
+        {
+            var template = new UriTemplate("http://example.org/foo{?bar,baz}", resolvePartially: true);
+            //template.SetParameter("bar", "yo");
+            //template.SetParameter("blar", "yuck");
+            var uriString = template.Resolve();
+            Assert.Equal("http://example.org/foo{?bar,baz}", uriString);
+        }
+
+        [Fact]
         public void ShouldAllowUriTemplateToRemoveParameter()
         {
             var template = new UriTemplate("http://example.org/foo{?bar,baz}");
@@ -223,6 +233,8 @@ namespace UriTemplateTests
             template.SetParameter("query", "1234");
             template.SetParameter("per_page", "19");
             var result = template.Resolve();
+
+            Assert.Equal("https://api.github.com/search/code?q=1234&per_page=19", result);
         }
 
 
