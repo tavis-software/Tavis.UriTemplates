@@ -26,6 +26,8 @@ namespace UriTemplateTests
             Assert.True(match);
         }
 
+        #region GetParameters()
+
         [Fact]
         public void GetParameters()
         {
@@ -38,7 +40,7 @@ namespace UriTemplateTests
 
             var match = regex.Match(uri.AbsoluteUri);
 
-            Assert.Equal("foo",match.Groups["p1"].Value);
+            Assert.Equal("foo", match.Groups["p1"].Value);
             Assert.Equal("bar", match.Groups["p2"].Value);
         }
 
@@ -87,6 +89,7 @@ namespace UriTemplateTests
             Assert.Equal("45", parameters["blur"]);
 
         }
+
         [Fact]
         public void GetParametersFromMultipleQueryStringWithTwoParamValues()
         {
@@ -135,6 +138,155 @@ namespace UriTemplateTests
 
         }
 
+        [Fact]
+        public void GetParametersRespectsOrderOfQueryParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blob=23&blur=45");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Null(parameters);
+        }
+
+        [Fact]
+        public void GetParametersReturnsNullWhenTheresNoMatch()
+        {
+            var uri = new Uri("http://example.com/foo/bar?one=23&two=45");
+
+            var template = new UriTemplate("http://example.com/foo/bar{?blur,blob}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Null(parameters);
+        }
+
+        #endregion 
+
+        #region GetParametersNonStrict()
+
+        [Fact]
+        public void GetParametersNonStrictWithOperators()
+        {
+            var uri = new Uri("http://example.com/foo/bar");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal(2, parameters.Count);
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+        }
+
+        [Fact]
+        public void GetParametersNonStrictFromQueryString()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blur=45");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal(3, parameters.Count);
+
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("45", parameters["blur"]);
+        }
+
+        [Fact]
+        public void GetParametersNonStrictFromMultipleQueryString()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blur=45");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal(3, parameters.Count);
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("45", parameters["blur"]);
+
+        }
+
+        [Fact]
+        public void GetParametersNonStrictFromMultipleQueryStringWithTwoParamValues()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blur=45&blob=23");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal(4, parameters.Count);
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("45", parameters["blur"]);
+            Assert.Equal("23", parameters["blob"]);
+        }
+
+        [Fact]
+        public void GetParametersNonStrictFromMultipleQueryStringWithOptionalAndMandatoryParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blur=45&blob=23");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur}{&blob}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal(4, parameters.Count);
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("45", parameters["blur"]);
+            Assert.Equal("23", parameters["blob"]);
+        }
+
+        [Fact]
+        public void GetParametersNonStrictFromMultipleQueryStringWithOptionalParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+        }
+
+        [Fact]
+        public void GetParametersNonStrictIgnoresOrderOfQueryParameters()
+        {
+            var uri = new Uri("http://example.com/foo/bar?blob=23&blur=45&irrelevant=true");
+
+            var template = new UriTemplate("http://example.com/{+p1}/{p2*}{?blur,blob}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.Equal(4, parameters.Count);
+            Assert.Equal("foo", parameters["p1"]);
+            Assert.Equal("bar", parameters["p2"]);
+            Assert.Equal("23", parameters["blob"]);
+            Assert.Equal("45", parameters["blur"]);
+        }
+
+        [Fact]
+        public void GetParametersNonStrictReturnsEmptyDictionaryWhenTheresNoMatch()
+        {
+            var uri = new Uri("http://example.com/foo/bar?one=23&two=45");
+
+            var template = new UriTemplate("http://example.com/foo/bar{?blur,blob}");
+
+            var parameters = template.GetParametersNonStrict(uri);
+
+            Assert.NotNull(parameters);
+            Assert.Equal(0, parameters.Count);
+        }
+
+        #endregion 
 
         [Fact]
         public void TestGlimpseUrl()
@@ -162,8 +314,6 @@ namespace UriTemplateTests
             Assert.Equal("123", parameters["hash"]);
 
         }
-
-        
 
         [Fact]
         public void TestExactParameterCount()
