@@ -81,7 +81,9 @@ namespace UriTemplateTests
                 [Theory,
      InlineData("/foo?x=1&y=2", "fooxy3"),
      InlineData("/foo?x=1", "fooxy2"),
+     InlineData("/foo?x=a,b,c,d", "fooxy2"),
      InlineData("/foo?y=2", "fooxy"),
+
      InlineData("/foo", "fooxy"),
     ]
         public void FindTemplatesWithQueryStrings(string url, string key)
@@ -106,9 +108,27 @@ namespace UriTemplateTests
             }
         }
 
-    }
+        [Fact]
+        public void FindTemplatesWithArrayQueryParameters()
+        {
+            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
+            table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
+            table.Add("fooxy2", new UriTemplate("/foo?x={x}{&y}"));
+            table.Add("fooxy4", new UriTemplate("/foo?x={x}{&z}"));
+            table.Add("fooxy", new UriTemplate("/foo{?x,y}"));
+            table.Add("foo", new UriTemplate("/foo"));
+
+
+            var result = table.Match(new Uri("/foo?x=a,b,c,d", UriKind.RelativeOrAbsolute));
+
+            Assert.Equal("fooxy2", result.Key);
+            
+        }
+
 
     }
+
+}
 
 
 

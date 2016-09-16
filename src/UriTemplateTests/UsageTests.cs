@@ -55,6 +55,22 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/foo/yo/baz?lat=31.464&lng=74.386", uriString);
         }
 
+
+        [Fact]
+        public void ShouldResolveMatrixParameter()
+        {
+            var template = new UriTemplate("http://example.org/foo{;lat,lng}");
+
+            double lat = 31.464, lng = 74.386;
+
+            template.SetParameter("lat", lat);
+            template.SetParameter("lng", lng);
+
+            var uriString = template.Resolve();
+            Assert.Equal("http://example.org/foo;lat=31.464;lng=74.386", uriString);
+        }
+
+
         [Fact]
         public void ShouldAllowUriTemplateWithQueryParamsButNoValues()
         {

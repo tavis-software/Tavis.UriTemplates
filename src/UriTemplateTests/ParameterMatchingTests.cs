@@ -105,6 +105,20 @@ namespace UriTemplateTests
         }
 
         [Fact]
+        public void GetParameterFromArrayParameter()
+        {
+            var uri = new Uri("http://example.com?blur=45,23");
+
+            var template = new UriTemplate("http://example.com{?blur}");
+
+            var parameters = template.GetParameters(uri);
+
+            Assert.Equal(1, parameters.Count);
+            Assert.Equal("45,23", parameters["blur"]);
+
+        }
+
+        [Fact]
         public void GetParametersFromMultipleQueryStringWithOptionalAndMandatoryParameters()
         {
             var uri = new Uri("http://example.com/foo/bar?blur=45&blob=23");
@@ -266,16 +280,16 @@ namespace UriTemplateTests
         [Fact]
         public void OptionalPathParamWithMultipleValues()
         {
-            var uri = new Uri("/foo/yuck,yob/bob", UriKind.RelativeOrAbsolute);
+            var uri = new Uri("/foo/yuck/yob/bob", UriKind.RelativeOrAbsolute);
 
             var template = new UriTemplate("/foo{/bar,baz}/bob");
 
             var parameters = template.GetParameters(uri);
-
+            Assert.Equal(2, parameters.Count); // This current fails
             Assert.Equal("yuck", parameters["bar"]);
             Assert.Equal("yob", parameters["baz"]);
         }
-
+        
 
     }
 }

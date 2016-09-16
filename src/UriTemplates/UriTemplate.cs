@@ -407,7 +407,39 @@ namespace Tavis.UriTemplates
                 return regex +"$";
             }
 
-            private static string GetQueryExpression(List<String> paramNames, string prefix)
+        public static string CreateMatchingRegex2(string uriTemplate)
+        {
+            var findParam = new Regex(varspec);
+            //split by host/path/query/fragment
+
+            var template = new Regex(@"([^{]|^)\?").Replace(uriTemplate, @"$+\?"); ;//.Replace("?",@"\?");
+            var regex = findParam.Replace(template, delegate (Match m)
+            {
+                var paramNames = m.Groups["lvar"].Captures.Cast<Capture>().Where(c => !string.IsNullOrEmpty(c.Value)).Select(c => c.Value).ToList();
+                var op = m.Groups["op"].Value;
+                switch (op)
+                {
+                    case "?":
+                        return GetQueryExpression(paramNames, prefix: "?");
+                    case "&":
+                        return GetQueryExpression(paramNames, prefix: "&");
+                    case "#":
+                        return GetExpression(paramNames, prefix: "#");
+                    case "/":
+                        return GetExpression(paramNames, prefix: "/");
+
+                    case "+":
+                        return GetExpression(paramNames);
+                    default:
+                        return GetExpression(paramNames);
+                }
+
+            });
+
+            return regex + "$";
+        }
+
+        private static string GetQueryExpression(List<String> paramNames, string prefix)
             {
                 StringBuilder sb = new StringBuilder();
                 foreach (var paramname in paramNames)
@@ -436,19 +468,46 @@ namespace Tavis.UriTemplates
             {
                 StringBuilder sb = new StringBuilder();
 
-                foreach (var paramname in paramNames)
+                string paramDelim;
+
+                switch (prefix)
+                {
+                    case "#":
+                        paramDelim = "[^,]+";
+                        break;
+                    case "/":
+                        paramDelim = "[^/?]+";
+                        break;
+                    case "?":
+                    case "&":
+                        paramDelim = "[^&#]+";
+                        break;
+                    case ";":
+                        paramDelim = "[^;/?#]+";
+                        break;
+                    case ".":
+                        paramDelim = "[^./?#]+";
+                        break;
+
+                default:
+                    paramDelim = "[^/?&]+";
+                    break;
+
+            }
+
+            foreach (var paramname in paramNames)
                 {
                     if (string.IsNullOrEmpty(paramname)) continue;
 
                     if (prefix != null)
                     {
                         sb.Append(@"\" + prefix + "?");
-                        prefix = ",";
+                        if (prefix == "#") { prefix = ","; }
                     }
                     sb.Append("(?<");
                     sb.Append(paramname);
                     sb.Append(">");
-                    sb.Append("[^/?&,]+"); // Param Value
+                    sb.Append(paramDelim); // Param Value
                     sb.Append(")?");
                 }
 
