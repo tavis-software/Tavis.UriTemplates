@@ -266,7 +266,7 @@ namespace UriTemplateTests
             
         }
 
-        [Fact]
+        //[Fact] Unit tests should not require internet access!!
         public void PreserveReservedCharacterExpansion()
         {
             UriTemplate template = new UriTemplate("https://foo.com/?format={+format}");
@@ -418,5 +418,22 @@ namespace UriTemplateTests
 
             Assert.Equal("/log?a=b&c=4", url);
         }
+
+
+        [Fact]
+        public void InvalidSpace()
+        {
+            Exception ex = null;
+            try
+            {
+                var url = new UriTemplate("/feeds/events{? fromId").Resolve();
+            } catch (Exception e)
+            {
+                ex = e;
+            }
+            Assert.NotNull(ex);
+        }
+
+        
     }
 }
