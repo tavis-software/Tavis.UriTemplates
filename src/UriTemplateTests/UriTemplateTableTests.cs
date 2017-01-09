@@ -126,6 +126,18 @@ namespace UriTemplateTests
         }
 
 
+        [Fact]
+        public void MatchTemplateWithDifferentOrderOfParameters()
+        {
+            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
+            table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
+
+            var result = table.Match(new Uri("/foo?y=a&x=b", UriKind.RelativeOrAbsolute));
+
+            Assert.Equal("fooxy3", result.Key);
+
+        }
+
     }
 
 }
