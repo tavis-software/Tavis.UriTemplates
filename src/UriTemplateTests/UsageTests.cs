@@ -243,7 +243,7 @@ namespace UriTemplateTests
         }
 
         [Fact]
-        public void FactMethodName()
+        public void ResolveOptionalAndRequiredQueryParameters()
         {
             UriTemplate template = new UriTemplate("https://api.github.com/search/code?q={query}{&page,per_page,sort,order}");
             template.SetParameter("query", "1234");
