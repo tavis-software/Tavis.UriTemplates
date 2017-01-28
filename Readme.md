@@ -1,6 +1,7 @@
-# Uri Templates #
+# Uri Templates # 
+![Build Status](https://ci.appveyor.com/api/projects/status/nol9sb59uvxvgt8l?svg=true) [![NuGet](https://img.shields.io/nuget/v/Tavis.UriTemplates.svg?label=NuGet)](https://www.nuget.org/packages/Tavis.UriTemplates/)
 
-.NET implementation of the [URI Template Spec RFC6570](http://tools.ietf.org/html/rfc6570). ![Build Status](https://ci.appveyor.com/api/projects/status/nol9sb59uvxvgt8l?svg=true)
+.NET implementation of the [URI Template Spec RFC6570](http://tools.ietf.org/html/rfc6570). 
 
 Library implements Level 4 compliance and is tested against test cases from [UriTemplate test suite](https://github.com/uri-templates/uritemplate-test).
 
