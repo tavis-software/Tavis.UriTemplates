@@ -9,11 +9,16 @@ namespace Tavis.UriTemplates
     using System;
     using System.Collections;
     using System.Collections.Generic;
+#if TYPE_CONVERTER
+    using System.ComponentModel;
+#endif
     using System.Linq;
     using System.Text;
 
-
-        public class UriTemplate
+#if TYPE_CONVERTER
+    [TypeConverter(typeof(UriTemplateConverter))]
+#endif
+    public class UriTemplate
         {
 
 
