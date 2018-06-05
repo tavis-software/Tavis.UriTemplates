@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TYPE_CONVERTER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -47,6 +47,9 @@
     </Compile>
     <Compile Include="..\UriTemplates\UriTemplate.cs">
       <Link>UriTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\UriTemplates\UriTemplateConverter.cs">
+      <Link>UriTemplateConverter.cs</Link>
     </Compile>
     <Compile Include="..\UriTemplates\UriTemplateExtensions.cs">
       <Link>UriTemplateExtensions.cs</Link>
