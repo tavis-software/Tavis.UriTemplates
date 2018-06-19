@@ -1,5 +1,8 @@
 # Uri Templates #
 
+##1.1.2
+- Added Type converter support 
+
 ##1.1.1
 - Fixed bug parsing query paranmeter with comma delimited values
 
