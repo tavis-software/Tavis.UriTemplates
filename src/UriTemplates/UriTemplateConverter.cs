@@ -7,7 +7,7 @@ namespace Tavis.UriTemplates
     /// <summary>
     /// Converts to <see cref="UriTemplate"/> instances from other representations.
     /// </summary>
-    public sealed class UriTemplateConverter
+    public sealed class UriTemplateConverter 
         : TypeConverter
     {
         /// <inheritdoc/>
@@ -22,18 +22,16 @@ namespace Tavis.UriTemplates
             CultureInfo culture,
             object value)
         {
-            if (value == null) { return null; }
-
-            var template = value as string;
-            if (template != null)
+            if (value == null)
             {
-                if (template.Length == 0)
-                {
-                    // For TypeConverter purposes, an empty string is "no value."
-                    return null;
-                }
+                return null;
+            }
 
-                return new UriTemplate(template);
+            if (value is string template)
+            {
+                return template.Length == 0
+                    ? null
+                    : new UriTemplate(template);
             }
 
             throw (NotSupportedException)GetConvertFromException(value);

@@ -15,18 +15,11 @@ namespace Tavis.UriTemplates
             _operatorInfo = operatorInfo;
         }
 
-        public OperatorInfo OperatorInfo
-        {
-            get { return _operatorInfo; }
-        }
+        public OperatorInfo OperatorInfo => _operatorInfo;
 
-        public override string ToString()
-        {
-            return (First ? _operatorInfo.First : "") +
-                   VarName.ToString()
-                   + (Explode ? "*" : "")
-                   + (PrefixLength > 0 ? ":" + PrefixLength : "");
-
-        }
+        public override string ToString() => (First ? _operatorInfo.First : "") 
+            + VarName
+            + (Explode ? "*" : "")
+            + (PrefixLength > 0 ? ":" + PrefixLength : "");
     }
 }
