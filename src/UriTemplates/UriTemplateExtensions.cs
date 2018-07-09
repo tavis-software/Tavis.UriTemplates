@@ -17,15 +17,13 @@ namespace Tavis.UriTemplates
 
         public static UriTemplate AddParameters(this UriTemplate template, object parametersObject)
         {
-
             if (parametersObject != null)
             {
-                IEnumerable<PropertyInfo> properties;
-#if DOTNET5_1
+#if NETSTANDARD
                 var type = parametersObject.GetType().GetTypeInfo();
-                properties = type.DeclaredProperties.Where(p=> p.CanRead);
+                var properties = type.DeclaredProperties.Where(p=> p.CanRead);
 #else
-                properties = parametersObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                var properties = parametersObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 #endif
 
                 foreach (var propinfo in properties)
@@ -36,6 +34,7 @@ namespace Tavis.UriTemplates
 
             return template;
         }
+
         public static UriTemplate AddParameters(this UriTemplate uriTemplate, IDictionary<string, object> linkParameters)
         {
             if (linkParameters != null)
@@ -55,14 +54,13 @@ namespace Tavis.UriTemplates
         {
             var parameters = uri.GetQueryStringParameters();
             return MakeTemplate(uri, parameters);
-
         }
 
         public static UriTemplate MakeTemplate(this Uri uri, IDictionary<string, object> parameters)
         {
-            var target = uri.GetComponents(UriComponents.AbsoluteUri
-                                                     & ~UriComponents.Query
-                                                     & ~UriComponents.Fragment, UriFormat.Unescaped);
+            string target = uri.GetComponents(UriComponents.AbsoluteUri 
+                & ~UriComponents.Query 
+                & ~UriComponents.Fragment, UriFormat.Unescaped);
             var template = new UriTemplate(target + "{?" + string.Join(",", parameters.Keys.ToArray()) + "}");
             template.AddParameters(parameters);
 
@@ -71,7 +69,7 @@ namespace Tavis.UriTemplates
 
         public static Dictionary<string, object> GetQueryStringParameters(this Uri target)
         {
-            Uri uri = target;
+            var uri = target;
             var parameters = new Dictionary<string, object>();
 
             var reg = new Regex(@"([-A-Za-z0-9._~]*)=([^&]*)&?");		// Unreserved characters: http://tools.ietf.org/html/rfc3986#section-2.3
@@ -83,7 +81,5 @@ namespace Tavis.UriTemplates
             }
             return parameters;
         }
-
-       
     }
 }

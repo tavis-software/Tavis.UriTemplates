@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tavis;
+﻿using System.Collections.Generic;
 using Tavis.UriTemplates;
 using Xunit;
 
@@ -13,18 +9,17 @@ namespace UriTemplateTests
         [Fact]
         public void UpdatePathParameter()
         {
-            var url = new UriTemplate("http://example.org/{tenant}/customers")
+            string url = new UriTemplate("http://example.org/{tenant}/customers")
                 .AddParameter("tenant", "acmé")
                 .Resolve();
 
             Assert.Equal("http://example.org/acm%C3%A9/customers", url);
         }
 
-
         [Fact]
         public void QueryParametersTheOldWay()
         {
-            var url = new UriTemplate("http://example.org/customers?active={activeflag}")
+            string url = new UriTemplate("http://example.org/customers?active={activeflag}")
                 .AddParameter("activeflag", "true")
                 .Resolve();
 
@@ -34,7 +29,7 @@ namespace UriTemplateTests
         [Fact]
         public void QueryParametersTheNewWay()
         {
-            var url = new UriTemplate("http://example.org/customers{?active}")
+            string url = new UriTemplate("http://example.org/customers{?active}")
                 .AddParameter("active", "true")
                 .Resolve();
 
@@ -44,8 +39,7 @@ namespace UriTemplateTests
         [Fact]
         public void QueryParametersTheNewWayWithoutValue()
         {
-
-            var url = new UriTemplate("http://example.org/customers{?active}")
+            string url = new UriTemplate("http://example.org/customers{?active}")
                 .AddParameters(null)
                 .Resolve();
 
@@ -55,18 +49,17 @@ namespace UriTemplateTests
         [Fact]
         public void ShouldResolveUriTemplateWithNonStringParameter()
         {
-            var url = new UriTemplate("http://example.org/location{?lat,lng}")
+            string url = new UriTemplate("http://example.org/location{?lat,lng}")
                 .AddParameters(new { lat = 31.464, lng = 74.386 })
                 .Resolve();
 
             Assert.Equal("http://example.org/location?lat=31.464&lng=74.386", url);
         }
 
-
         [Fact]
         public void ParametersFromAnObject()
         {
-            var url = new UriTemplate("http://example.org/{environment}/{version}/customers{?active,country}")
+            string url = new UriTemplate("http://example.org/{environment}/{version}/customers{?active,country}")
                 .AddParameters(new
                 {
                     environment = "dev",
@@ -82,7 +75,7 @@ namespace UriTemplateTests
         [Fact]
         public void SomeParametersFromAnObject()
         {
-            var url = new UriTemplate("http://example.org{/environment}{/version}/customers{?active,country}")
+            string url = new UriTemplate("http://example.org{/environment}{/version}/customers{?active,country}")
                 .AddParameters(new
                 {
                     version = "v2",
@@ -96,11 +89,11 @@ namespace UriTemplateTests
         [Fact]
         public void ApplyDictionaryToQueryParameters()
         {
-            var url = new UriTemplate("http://example.org/foo{?coords*}")
+            string url = new UriTemplate("http://example.org/foo{?coords*}")
                 .AddParameter("coords", new Dictionary<string, string>
                 {
                     {"x", "1"},
-                    {"y", "2"},
+                    {"y", "2"}
                 })
                 .Resolve();
 
@@ -110,7 +103,7 @@ namespace UriTemplateTests
         [Fact]
         public void ApplyParametersObjectToPathSegment()
         {
-            var url = new UriTemplate("http://example.org/foo/{bar}/baz")
+            string url = new UriTemplate("http://example.org/foo/{bar}/baz")
                 .AddParameters(new {bar = "yo"})
                 .Resolve();
 
@@ -120,16 +113,17 @@ namespace UriTemplateTests
         [Fact]
         public void ExtremeEncoding()
         {
-            var url = new UriTemplate("http://example.org/sparql{?query}")
+            string url = new UriTemplate("http://example.org/sparql{?query}")
                     .AddParameter("query", "PREFIX dc: <http://purl.org/dc/elements/1.1/> SELECT ?book ?who WHERE { ?book dc:creator ?who }")
                     .Resolve();
+
             Assert.Equal("http://example.org/sparql?query=PREFIX%20dc%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%3E%20SELECT%20%3Fbook%20%3Fwho%20WHERE%20%7B%20%3Fbook%20dc%3Acreator%20%3Fwho%20%7D", url);
         }
 
         [Fact]
         public void ApplyParametersObjectWithAList()
         {
-            var url = new UriTemplate("http://example.org/customers{?ids,order}")
+            string url = new UriTemplate("http://example.org/customers{?ids,order}")
                 .AddParameters(new
                 {
                     order = "up", 
@@ -142,7 +136,7 @@ namespace UriTemplateTests
         [Fact]
         public void ApplyParametersObjectWithAListofInts()
         {
-            var url = new UriTemplate("http://example.org/customers{?ids,order}")
+            string url = new UriTemplate("http://example.org/customers{?ids,order}")
                 .AddParameters(new
                 {
                     order = "up",
@@ -156,7 +150,7 @@ namespace UriTemplateTests
         [Fact]
         public void ApplyParametersObjectWithAListofIntsExploded()
         {
-            var url = new UriTemplate("http://example.org/customers{?ids*,order}")
+            string url = new UriTemplate("http://example.org/customers{?ids*,order}")
                 .AddParameters(new
                 {
                     order = "up",
@@ -170,7 +164,7 @@ namespace UriTemplateTests
         [Fact]
         public void ApplyFoldersToPath()
         {
-            var url = new UriTemplate("http://example.org/files{/folders*}{?filename}")
+            string url = new UriTemplate("http://example.org/files{/folders*}{?filename}")
                 .AddParameters(new
                 {
                     folders = new[] {"customer", "project"},
@@ -184,8 +178,7 @@ namespace UriTemplateTests
         [Fact]
         public void ParametersFromAnObjectFromInvalidUrl()
         {
-
-            var url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}")
+            string url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}")
             .AddParameters(new
             {
                 environment = "dev",
@@ -198,12 +191,10 @@ namespace UriTemplateTests
             Assert.Equal("http://dev.example.org/v2/customers?active=true&country=CA", url);
         }
 
-
         [Fact]
         public void ApplyFoldersToPathFromStringNotUrl()
         {
-
-            var url = new UriTemplate("http://example.org{/folders*}{?filename}")
+            string url = new UriTemplate("http://example.org{/folders*}{?filename}")
                 .AddParameters(new
                 {
                     folders = new[] { "files", "customer", "project" },
@@ -214,12 +205,10 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/files/customer/project?filename=proposal.pdf", url);
         }
 
-
         [Fact]
         public void ReplaceBaseAddress()
         {
-
-            var url = new UriTemplate("{+baseUrl}api/customer/{id}")
+            string url = new UriTemplate("{+baseUrl}api/customer/{id}")
                 .AddParameters(new
                 {
                     baseUrl = "http://example.org/",
@@ -233,8 +222,7 @@ namespace UriTemplateTests
         [Fact]
         public void ReplaceBaseAddressButNotId()
         {
-
-            var url = new UriTemplate("{+baseUrl}api/customer/{id}",resolvePartially:true)
+            string url = new UriTemplate("{+baseUrl}api/customer/{id}",resolvePartially:true)
                 .AddParameters(new
                 {
                     baseUrl = "http://example.org/"
@@ -247,8 +235,7 @@ namespace UriTemplateTests
         [Fact]
         public void PartiallyParametersFromAnObjectFromInvalidUrl()
         {
-
-            var url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}",resolvePartially:true)
+            string url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}",resolvePartially:true)
             .AddParameters(new
             {
                 environment = "dev",
@@ -259,12 +246,10 @@ namespace UriTemplateTests
             Assert.Equal("http://dev.example.org/v2/customers{?active,country}", url);
         }
 
-
         [Fact]
         public void PartiallyApplyFoldersToPathFromStringNotUrl()
         {
-
-            var url = new UriTemplate("http://example.org{/folders*}{?filename}",true)
+            string url = new UriTemplate("http://example.org{/folders*}{?filename}",true)
                 .AddParameters(new
                 {
                     filename = "proposal.pdf"
@@ -277,9 +262,7 @@ namespace UriTemplateTests
         [Fact]
         public void UseArbitraryClassAsParameter()
         {
-
-
-            var url = new UriTemplate("/{test}", true)
+            string url = new UriTemplate("/{test}", true)
                 .AddParameters(new
                 {
                     test = new Something()
@@ -289,12 +272,10 @@ namespace UriTemplateTests
             Assert.Equal("/something", url);
         }
 
-
         [Fact]
         public void AddMultipleParametersToLink()
         {
             var template = new UriTemplate("http://localhost/api/{dataset}/customer{?foo,bar,baz}");
-
             template.AddParameters(new Dictionary<string, object>
             {
                 {"foo", "bar"},
@@ -302,14 +283,13 @@ namespace UriTemplateTests
                 {"dataset", "bob"}
             });
 
-            var uri = template.Resolve();
+            string uri = template.Resolve();
 
             Assert.Equal("http://localhost/api/bob/customer?foo=bar&baz=99", uri);
         }
-
     }
 
-    class Something
+    internal class Something
     {
         public override string ToString()
         {

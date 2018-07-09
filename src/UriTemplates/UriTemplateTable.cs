@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Tavis.UriTemplates
 {
     public class UriTemplateTable
     {
-        private Dictionary<string,UriTemplate> _Templates =  new Dictionary<string,UriTemplate>();
+        private readonly Dictionary<string,UriTemplate> _Templates =  new Dictionary<string,UriTemplate>();
         
         public void Add(string key, UriTemplate template)
         {
@@ -21,27 +19,15 @@ namespace Tavis.UriTemplates
                 var parameters = template.Value.GetParameters(url);
                 if (parameters != null)
                 {
-                    return new TemplateMatch() { Key = template.Key, Parameters = parameters, Template = template.Value };
+                    return new TemplateMatch { Key = template.Key, Parameters = parameters, Template = template.Value };
                 }
             }
             return null;
         }
 
-        public UriTemplate this[string key]
-        {
-            get
-            {
-                UriTemplate value;
-                if (_Templates.TryGetValue(key, out value))
-                {
-                    return value;
-                }
-                else {
-                    return null;
-                }
-            }
-        }
-
+        public UriTemplate this[string key] => _Templates.TryGetValue(key, out var value)
+            ? value
+            : null;
     }
 
     public class TemplateMatch

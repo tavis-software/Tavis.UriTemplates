@@ -8,6 +8,5 @@ namespace Tavis.UriTemplates
         public bool Named { get; set; }
         public string IfEmpty { get; set; }
         public bool AllowReserved { get; set; }
-
     }
 }
