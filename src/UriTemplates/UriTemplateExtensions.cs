@@ -20,12 +20,12 @@ namespace Tavis.UriTemplates
 
             if (parametersObject != null)
             {
-                IEnumerable<PropertyInfo> properties;
-#if DOTNET5_1
-                var type = parametersObject.GetType().GetTypeInfo();
-                properties = type.DeclaredProperties.Where(p=> p.CanRead);
+
+#if NET35
+                var properties = parametersObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
 #else
-                properties = parametersObject.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                var type = parametersObject.GetType().GetTypeInfo();
+                var properties = type.DeclaredProperties.Where(p=> p.CanRead);
 #endif
 
                 foreach (var propinfo in properties)

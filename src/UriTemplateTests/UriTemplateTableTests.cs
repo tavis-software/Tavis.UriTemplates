@@ -126,7 +126,7 @@ namespace UriTemplateTests
         }
 
 
-        [Fact]
+        [Fact(Skip = "This doesn't appear to be implemented.")]
         public void MatchTemplateWithDifferentOrderOfParameters()
         {
             var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
@@ -134,6 +134,7 @@ namespace UriTemplateTests
 
             var result = table.Match(new Uri("/foo?y=a&x=b", UriKind.RelativeOrAbsolute));
 
+            Assert.NotNull(result);
             Assert.Equal("fooxy3", result.Key);
 
         }

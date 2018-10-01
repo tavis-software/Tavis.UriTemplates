@@ -1,6 +1,7 @@
 language: csharp
 sudo: false   # use the new container-based Travis infrastructure
-install:
-  - nuget restore UriTemplates.sln
 script:
-  - xbuild /p:Configuration=Release /t:Compile build/Build.proj
+  - dotnet build --configuration Release
+  - dotnet test --configuration Release ./src/UriTemplateTests/UriTemplateTests.csproj
+  - dotnet pack --configuration Release --output $(pwd)/artifacts
+
