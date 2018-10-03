@@ -9,31 +9,13 @@
 	  <SolutionDir>$(BaseDir)</SolutionDir>  <!-- Needed or import of nuget targets in csproj file fails-->
   </PropertyGroup>
  
-  
   <Target Name="default" DependsOnTargets="Compile; Package" />
  
   <Target Name="Compile">
-  
   	<MSBuild Projects="$(BaseDir)\src\UriTemplates\UriTemplates.csproj" 
 	  			Targets="Rebuild"
 	  			Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net35"  />
-    
-    	<MSBuild Projects="$(BaseDir)\src\UriTemplates.net40\UriTemplates.net40.csproj" 
-    			 Targets="Rebuild"
-    			 Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net40"  />
-   
-    	<MSBuild Projects="$(BaseDir)\src\UriTemplates.net45\UriTemplates.net45.csproj" 
-    		Targets="Rebuild"
-    		Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\Net45"  />
-	  
-	  	<MSBuild Projects="$(BaseDir)\src\UriTemplatesPCL\UriTemplatesPCL.csproj" 
-	  		Targets="Rebuild"
-	  		Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\netstandard1.0"  />
-
-  		<MSBuild Projects="$(BaseDir)\src\UriTemplates.Profile92\UriTemplates.Profile92.csproj" 
-  				Targets="Rebuild"
-  				Properties="Configuration=$(Configuration);OutputPath=$(ArtifactsDir)\lib\portable-net4+netcore45+wpa81"  />
-    </Target>
+  </Target>
  
   <Target Name="Package">
       <Exec WorkingDirectory="$(BuildDir)" 

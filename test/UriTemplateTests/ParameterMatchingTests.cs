@@ -1,18 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Tavis.UriTemplates;
 using Xunit;
-using Xunit.Extensions;
 
 namespace UriTemplateTests
 {
     public class ParameterMatchingTests
     {
-        
-
         [Fact]
         public void MatchUriToTemplate()
         {
@@ -85,8 +79,8 @@ namespace UriTemplateTests
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
             Assert.Equal("45", parameters["blur"]);
-
         }
+
         [Fact]
         public void GetParametersFromMultipleQueryStringWithTwoParamValues()
         {
@@ -101,7 +95,6 @@ namespace UriTemplateTests
             Assert.Equal("bar", parameters["p2"]);
             Assert.Equal("45", parameters["blur"]);
             Assert.Equal("23", parameters["blob"]);
-
         }
 
         [Fact]
@@ -115,7 +108,6 @@ namespace UriTemplateTests
 
             Assert.Equal(1, parameters.Count);
             Assert.Equal("45,23", parameters["blur"]);
-
         }
 
         [Fact]
@@ -132,7 +124,6 @@ namespace UriTemplateTests
             Assert.Equal("bar", parameters["p2"]);
             Assert.Equal("45", parameters["blur"]);
             Assert.Equal("23", parameters["blob"]);
-
         }
 
         [Fact]
@@ -146,9 +137,7 @@ namespace UriTemplateTests
 
             Assert.Equal("foo", parameters["p1"]);
             Assert.Equal("bar", parameters["p2"]);
-
         }
-
 
         [Fact]
         public void TestGlimpseUrl()
@@ -163,21 +152,16 @@ namespace UriTemplateTests
             Assert.Equal("123232323", parameters["parentRequestId"]);
             Assert.Equal("23ADE34FAE", parameters["hash"]);
             Assert.Equal("http://example.com/callback", parameters["callback"]);
-
         }
 
         [Fact]
         public void TestUrlWithQuestionMarkAsFirstCharacter()
         {
-
             var parameters = new UriTemplate("?hash={hash}").GetParameters(new Uri("http://localhost:5000/glimpse/metadata?hash=123"));;
 
             Assert.Equal(1, parameters.Count);
             Assert.Equal("123", parameters["hash"]);
-
         }
-
-        
 
         [Fact]
         public void TestExactParameterCount()
@@ -189,7 +173,6 @@ namespace UriTemplateTests
             var parameters = template.GetParameters(uri);
 
             Assert.Equal(1, parameters.Count);
-
         }
 
         [Fact]
@@ -202,12 +185,8 @@ namespace UriTemplateTests
             for (int i = 0; i < 100000; i++)
             {
                 var parameters = template.GetParameters(uri);
-                
             }
-
-
         }
-
 
         [Fact]
         public void Level1Decode()
@@ -219,9 +198,7 @@ namespace UriTemplateTests
             var parameters = template.GetParameters(uri);
 
             Assert.Equal("Hello World", parameters["p1"]);
-
         }
-
 
         //[Fact]
         //public void Level2Decode()
@@ -233,7 +210,6 @@ namespace UriTemplateTests
         //    var parameters = template.GetParameters(uri);
 
         //    Assert.Equal("Hello/World", parameters["p1"]);
-
         //}
 
         [Fact]
@@ -246,9 +222,7 @@ namespace UriTemplateTests
             var parameters = template.GetParameters(uri);
 
             Assert.Equal("Hello World!", parameters["p1"]);
-
         }
-
 
         [Fact]
         public void FragmentParams()
@@ -261,7 +235,6 @@ namespace UriTemplateTests
 
             Assert.Equal("Hello World!", parameters["p1"]);
             Assert.Equal("blurg", parameters["p2"]);
-
         }
 
         [Fact]
@@ -274,7 +247,6 @@ namespace UriTemplateTests
             var parameters = template.GetParameters(uri);
 
             Assert.Equal("yuck", parameters["bar"]);
-
         }
 
         [Fact]
@@ -289,7 +261,5 @@ namespace UriTemplateTests
             Assert.Equal("yuck", parameters["bar"]);
             Assert.Equal("yob", parameters["baz"]);
         }
-        
-
     }
 }

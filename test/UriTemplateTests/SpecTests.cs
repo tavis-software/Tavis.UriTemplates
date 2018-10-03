@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Tavis.UriTemplates;
 using Xunit;
-using Xunit.Extensions;
 
 namespace UriTemplateTests
 {
     public class UriTemplateTests2
     {
-
-        [Theory, MemberData("SpecSamples")]
+        [Theory, MemberData(nameof(SpecSamples))]
         public void SpecSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -25,11 +24,10 @@ namespace UriTemplateTests
             string result = null;
             result = uriTemplate.Resolve();
 
-            Assert.True(results.Contains(result));
+            Assert.Contains(result, results);
         }
 
-
-        [Theory, MemberData("ExtendedSamples")]
+        [Theory, MemberData(nameof(ExtendedSamples))]
         public void ExtendedSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -45,7 +43,6 @@ namespace UriTemplateTests
             try
             {
                 result = uriTemplate.Resolve();
-
             }
             catch (ArgumentException ex)
             {
@@ -58,13 +55,11 @@ namespace UriTemplateTests
             }
             else
             {
-                Assert.True(results.Contains(result));
+                Assert.Contains(result, results);
             }
-
         }
 
-
-        // Disabled for the moment. [Theory, PropertyData("FailureSamples")]
+        [Theory(Skip = "Disabled for the moment"), MemberData(nameof(FailureSamples))]
         public void FailureSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -80,7 +75,6 @@ namespace UriTemplateTests
             try
             {
                 result = uriTemplate.Resolve();
-
             }
             catch (ArgumentException ex)
             {
@@ -88,10 +82,7 @@ namespace UriTemplateTests
             }
 
             Assert.NotNull(aex);
-
-
         }
-
 
         public static IEnumerable<object[]> SpecSamples
         {
@@ -108,24 +99,18 @@ namespace UriTemplateTests
                 stream = typeof(UriTemplateTests2).Assembly.GetManifestResourceStream("UriTemplateTests.spec-examples-by-section.json");
                 suites.Add(CreateTestSuite(new StreamReader(stream).ReadToEnd()));
 
-
                 foreach (var suite in suites)
                 {
-
                     foreach (var testset in suite.Values)
                     {
                         foreach (var testCase in testset.TestCases)
                         {
                             yield return new object[] { testCase.Template, testCase.Result, testCase };
-
                         }
                     }
-
                 }
-
             }
         }
-
 
         public static IEnumerable<object[]> ExtendedSamples
         {
@@ -141,18 +126,14 @@ namespace UriTemplateTests
 
                 foreach (var suite in suites)
                 {
-
                     foreach (var testset in suite.Values)
                     {
                         foreach (var testCase in testset.TestCases)
                         {
                             yield return new object[] { testCase.Template, testCase.Result, testCase };
-
                         }
                     }
-
                 }
-
             }
         }
 
@@ -169,24 +150,18 @@ namespace UriTemplateTests
                     typeof(UriTemplateTests2).Assembly.GetManifestResourceStream("UriTemplateTests.negative-tests.json");
                 suites.Add(CreateTestSuite(new StreamReader(stream).ReadToEnd()));
 
-
                 foreach (var suite in suites)
                 {
-
                     foreach (var testset in suite.Values)
                     {
                         foreach (var testCase in testset.TestCases)
                         {
                             yield return new object[] { testCase.Template, testCase.Result, testCase };
-
                         }
                     }
-
                 }
-
             }
         }
-
 
         private static Dictionary<string, TestSet> CreateTestSuite(string json)
         {
@@ -196,7 +171,6 @@ namespace UriTemplateTests
             foreach (JProperty levelSet in token.Children())
             {
                 testSuite.Add(levelSet.Name, CreateTestSet(levelSet.Name, levelSet.Value));
-
             }
             return testSuite;
         }
@@ -225,39 +199,42 @@ namespace UriTemplateTests
 
         private static void ParseVariable(JProperty variable, Dictionary<string, object> dictionary)
         {
-            if (variable.Value.Type == JTokenType.Array)
+            using (new WithCultureInfo(CultureInfo.InvariantCulture))
             {
-                var array = (JArray)variable.Value;
-                if (array.Count == 0)
+                if (variable.Value.Type == JTokenType.Array)
                 {
-                    dictionary.Add(variable.Name, new List<string>());
+                    var array = (JArray) variable.Value;
+                    if (array.Count == 0)
+                    {
+                        dictionary.Add(variable.Name, new List<string>());
+                    }
+                    else
+                    {
+                        dictionary.Add(variable.Name, array.Values<string>());
+                    }
                 }
-                else
+                else if (variable.Value.Type == JTokenType.Object)
                 {
-                    dictionary.Add(variable.Name, array.Values<string>());
-                }
-            }
-            else if (variable.Value.Type == JTokenType.Object)
-            {
-                var jvalue = (JObject)variable.Value;
-                var dict = new Dictionary<string, string>();
-                foreach (var prop in jvalue.Properties())
-                {
-                    dict[prop.Name] = prop.Value.ToString();
-                }
-                dictionary.Add(variable.Name, dict);
-            }
-            else
-            {
-                if (((JValue)variable.Value).Value == null)
-                {
-                    dictionary.Add(variable.Name, null);
-                }
-                else
-                {
-                    dictionary.Add(variable.Name, variable.Value.ToString());
-                }
+                    var jvalue = (JObject) variable.Value;
+                    var dict = new Dictionary<string, string>();
+                    foreach (var prop in jvalue.Properties())
+                    {
+                        dict[prop.Name] = prop.Value.ToString();
+                    }
 
+                    dictionary.Add(variable.Name, dict);
+                }
+                else
+                {
+                    if (((JValue) variable.Value).Value == null)
+                    {
+                        dictionary.Add(variable.Name, null);
+                    }
+                    else
+                    {
+                        dictionary.Add(variable.Name, variable.Value.ToString());
+                    }
+                }
             }
         }
 
@@ -304,11 +281,6 @@ namespace UriTemplateTests
                 public string Template { get; set; }
                 public string[] Result { get; set; }
             }
-
-
         }
-
-
-
     }
 }

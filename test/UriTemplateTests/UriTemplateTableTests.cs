@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Tavis.UriTemplates;
 using Xunit;
-
 
 namespace UriTemplateTests
 {
     public class UriTemplateTableTests
     {
-
-        
-
-
-
         [Theory,
         InlineData("/","root"),
         InlineData("/baz/fod/burg",""),
@@ -31,7 +22,6 @@ namespace UriTemplateTests
             table.Add("baz", new UriTemplate("/baz/{bar}"));
             table.Add("blob", new UriTemplate("/baz/{bar}/blob"));
             table.Add("goo", new UriTemplate("/{goo}/{bar}/blob"));
-
 
             var result = table.Match(new Uri(url, UriKind.RelativeOrAbsolute));
 
@@ -64,7 +54,6 @@ namespace UriTemplateTests
             table.Add("chat", new UriTemplate("/games/{gametitle}/{gameid}/Chat/{chatid}"));
             table.Add("state", new UriTemplate("/games/{gametitle}/{gameid}/State/{stateid}"));
 
-
             var result = table.Match(new Uri(url, UriKind.RelativeOrAbsolute));
 
             if (string.IsNullOrEmpty(key))
@@ -76,7 +65,6 @@ namespace UriTemplateTests
                 Assert.Equal(key, result.Key);
             }
         }
-
 
                 [Theory,
      InlineData("/foo?x=1&y=2", "fooxy3"),
@@ -95,7 +83,6 @@ namespace UriTemplateTests
             table.Add("fooxy", new UriTemplate("/foo{?x,y}"));
             table.Add("foo", new UriTemplate("/foo"));
  
-
             var result = table.Match(new Uri(url, UriKind.RelativeOrAbsolute));
 
             if (string.IsNullOrEmpty(key))
@@ -118,13 +105,10 @@ namespace UriTemplateTests
             table.Add("fooxy", new UriTemplate("/foo{?x,y}"));
             table.Add("foo", new UriTemplate("/foo"));
 
-
             var result = table.Match(new Uri("/foo?x=a,b,c,d", UriKind.RelativeOrAbsolute));
 
             Assert.Equal("fooxy2", result.Key);
-            
         }
-
 
         [Fact]
         public void MatchTemplateWithDifferentOrderOfParameters()
@@ -135,12 +119,6 @@ namespace UriTemplateTests
             var result = table.Match(new Uri("/foo?y=a&x=b", UriKind.RelativeOrAbsolute));
 
             Assert.Equal("fooxy3", result.Key);
-
         }
-
     }
-
 }
-
-
-

@@ -21,7 +21,7 @@ namespace Tavis.UriTemplates
             if (parametersObject != null)
             {
                 IEnumerable<PropertyInfo> properties;
-#if DOTNET5_1
+#if NETSTANDARD1_0
                 var type = parametersObject.GetType().GetTypeInfo();
                 properties = type.DeclaredProperties.Where(p=> p.CanRead);
 #else
@@ -36,6 +36,7 @@ namespace Tavis.UriTemplates
 
             return template;
         }
+
         public static UriTemplate AddParameters(this UriTemplate uriTemplate, IDictionary<string, object> linkParameters)
         {
             if (linkParameters != null)
@@ -83,7 +84,5 @@ namespace Tavis.UriTemplates
             }
             return parameters;
         }
-
-       
     }
 }

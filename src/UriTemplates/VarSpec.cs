@@ -26,7 +26,6 @@ namespace Tavis.UriTemplates
                    VarName.ToString()
                    + (Explode ? "*" : "")
                    + (PrefixLength > 0 ? ":" + PrefixLength : "");
-
         }
     }
 }

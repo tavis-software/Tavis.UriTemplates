@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using Tavis.UriTemplates;
 using Xunit;
 
@@ -16,9 +14,7 @@ namespace UriTemplateTests
             for (int i = 20; i < 128; i++) {
                 Assert.Equal(Uri.HexEscape((char)i), Result.HexEscape((char)i));    
             }
-            
         }
-
         
         [Fact]
         public void ShouldAllowUriTemplateWithPathSegmentParameter()
@@ -28,7 +24,6 @@ namespace UriTemplateTests
             var uriString = template.Resolve();
             Assert.Equal("http://example.org/foo/yo/baz", uriString);
         }
-
 
         [Fact]
         public void ShouldAllowUriTemplateWithMultiplePathSegmentParameter()
@@ -55,7 +50,6 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/foo/yo/baz?lat=31.464&lng=74.386", uriString);
         }
 
-
         [Fact]
         public void ShouldResolveMatrixParameter()
         {
@@ -69,7 +63,6 @@ namespace UriTemplateTests
             var uriString = template.Resolve();
             Assert.Equal("http://example.org/foo;lat=31.464;lng=74.386", uriString);
         }
-
 
         [Fact]
         public void ShouldAllowUriTemplateWithQueryParamsButNoValues()
@@ -103,7 +96,6 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/foo?baz=yuck", uriString);
         }
         
-        
         [Fact]
         public void ShouldAllowUriTemplateWithQueryParamsWithOneValue()
         {
@@ -113,7 +105,6 @@ namespace UriTemplateTests
             var uriString = template.Resolve();
             Assert.Equal("http://example.org/foo?baz=yo", uriString);
         }
-
 
         [Fact]
         public void LabelExpansionWithDotPrefixAndEmptyKeys()
@@ -148,7 +139,6 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/person/albums?fields=id,name,picture&token=12345", uriString);
         }
 
-
         [Fact]
         public void ShouldHandleUriEncoding()
         {
@@ -167,7 +157,6 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/go?uri=http%3A%2F%2Fexample.org%2F%3Furi%3Dhttp%253A%252F%252Fexample.org%252F", uriString);
         }
 
-
         [Fact]
         public void ShouldThrowWhenExpressionIsNotClosed()
         {
@@ -179,12 +168,10 @@ namespace UriTemplateTests
             }
             catch (ArgumentException ex)
             {
-
                 result = ex.Message;
             }
 
             Assert.Equal("Malformed template, missing } : http://example.org/foo/{bar/baz/", result);
-
         }
 
         [Fact]
@@ -198,12 +185,10 @@ namespace UriTemplateTests
             }
             catch (ArgumentException ex)
             {
-
                 result = ex.Message;
             }
 
             Assert.Equal("Malformed template : http://example.org/foo/{}/baz/", result);
-
         }
 
         [Fact]
@@ -253,7 +238,6 @@ namespace UriTemplateTests
             Assert.Equal("https://api.github.com/search/code?q=1234&per_page=19", result);
         }
 
-
         [Fact]
         public void ReservedCharacterExpansion()
         {
@@ -263,10 +247,9 @@ namespace UriTemplateTests
             var result = template.Resolve();
 
             Assert.Equal("https://foo.com/?format=application%2Fvnd.foo%2Bxml",result);
-            
         }
 
-        //[Fact] Unit tests should not require internet access!!
+        [Fact(Skip = "Unit tests should not require internet access!!")]
         public void PreserveReservedCharacterExpansion()
         {
             UriTemplate template = new UriTemplate("https://foo.com/?format={+format}");
@@ -279,7 +262,6 @@ namespace UriTemplateTests
             var httpClient = new HttpClient();
 
             var response = httpClient.GetAsync("http://yahoo.com/foo%2Fbar").Result;
-
         }
 
         [Fact]
@@ -290,10 +272,9 @@ namespace UriTemplateTests
 
             var result = template.Resolve();
             
-
             Assert.Equal("/lookup?Stra%C3%9Fe=Gr%C3%BCner%20Weg", result);
-
         }
+
         // "assoc_special_chars"  : { "šöäŸœñê€£¥‡ÑÒÓÔÕ" : "Ö×ØÙÚàáâãäåæçÿ" }
         [Fact]
         public void ShouldSupportUnicodeCharacters2()
@@ -307,29 +288,23 @@ namespace UriTemplateTests
 
             var result = template.Resolve();
 
-
             Assert.Equal("?%C5%A1%C3%B6%C3%A4%C5%B8%C5%93%C3%B1%C3%AA%E2%82%AC%C2%A3%C2%A5%E2%80%A1%C3%91%C3%92%C3%93%C3%94%C3%95=%C3%96%C3%97%C3%98%C3%99%C3%9A%C3%A0%C3%A1%C3%A2%C3%A3%C3%A4%C3%A5%C3%A6%C3%A7%C3%BF", result);
-
         }
 
         [Fact]
         public void Remove_a_query_parameters2()
         {
-
             var target = new Uri("http://example.org/customer?format=xml&id=23");
 
             var template = target.MakeTemplate();
             template.ClearParameter("format");
 
-
             Assert.Equal("http://example.org/customer?id=23", template.Resolve());
         }
-
 
         [Fact]
         public void EncodingTest1()
         {
-
             var url = new UriTemplate("/1/search/auto/{folder}{?query}")
                 .AddParameter("folder","My Documents")
                 .AddParameter("query", "draft 2013")
@@ -341,7 +316,6 @@ namespace UriTemplateTests
         [Fact]
         public void EncodingTest2()
         {
-
             // Parameter values get encoded but hyphen doesn't need to be encoded because it
             // is an "unreserved" character according to RFC 3986
             var url = new UriTemplate("{/greeting}")
@@ -363,19 +337,15 @@ namespace UriTemplateTests
                 .Resolve();
 
             Assert.Equal("/hello/world", url3);
-
         }
 
         //  /docs/salary.csv?columns=1,2
         //  /docs/salary.csv?column=1&column=2
-
         //   /emails?from[name]=Don&from[date]=1998-03-24&to[name]=Norm
-
         // : /log?a=b&c=4
         [Fact]
         public void EncodingTest3()
         {
-
             // There are different ways that lists can be included in query params
             // Just as a comma delimited list
             var url = new UriTemplate("/docs/salary.csv{?columns}")
@@ -419,7 +389,6 @@ namespace UriTemplateTests
             Assert.Equal("/log?a=b&c=4", url);
         }
 
-
         [Fact]
         public void InvalidSpace()
         {
@@ -433,7 +402,5 @@ namespace UriTemplateTests
             }
             Assert.NotNull(ex);
         }
-
-        
     }
 }

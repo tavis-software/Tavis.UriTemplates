@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Tavis;
+﻿using System.Collections.Generic;
 using Tavis.UriTemplates;
 using Xunit;
 
@@ -19,7 +15,6 @@ namespace UriTemplateTests
 
             Assert.Equal("http://example.org/acm%C3%A9/customers", url);
         }
-
 
         [Fact]
         public void QueryParametersTheOldWay()
@@ -44,7 +39,6 @@ namespace UriTemplateTests
         [Fact]
         public void QueryParametersTheNewWayWithoutValue()
         {
-
             var url = new UriTemplate("http://example.org/customers{?active}")
                 .AddParameters(null)
                 .Resolve();
@@ -61,7 +55,6 @@ namespace UriTemplateTests
 
             Assert.Equal("http://example.org/location?lat=31.464&lng=74.386", url);
         }
-
 
         [Fact]
         public void ParametersFromAnObject()
@@ -184,7 +177,6 @@ namespace UriTemplateTests
         [Fact]
         public void ParametersFromAnObjectFromInvalidUrl()
         {
-
             var url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}")
             .AddParameters(new
             {
@@ -198,11 +190,9 @@ namespace UriTemplateTests
             Assert.Equal("http://dev.example.org/v2/customers?active=true&country=CA", url);
         }
 
-
         [Fact]
         public void ApplyFoldersToPathFromStringNotUrl()
         {
-
             var url = new UriTemplate("http://example.org{/folders*}{?filename}")
                 .AddParameters(new
                 {
@@ -214,11 +204,9 @@ namespace UriTemplateTests
             Assert.Equal("http://example.org/files/customer/project?filename=proposal.pdf", url);
         }
 
-
         [Fact]
         public void ReplaceBaseAddress()
         {
-
             var url = new UriTemplate("{+baseUrl}api/customer/{id}")
                 .AddParameters(new
                 {
@@ -233,7 +221,6 @@ namespace UriTemplateTests
         [Fact]
         public void ReplaceBaseAddressButNotId()
         {
-
             var url = new UriTemplate("{+baseUrl}api/customer/{id}",resolvePartially:true)
                 .AddParameters(new
                 {
@@ -247,7 +234,6 @@ namespace UriTemplateTests
         [Fact]
         public void PartiallyParametersFromAnObjectFromInvalidUrl()
         {
-
             var url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}",resolvePartially:true)
             .AddParameters(new
             {
@@ -259,11 +245,9 @@ namespace UriTemplateTests
             Assert.Equal("http://dev.example.org/v2/customers{?active,country}", url);
         }
 
-
         [Fact]
         public void PartiallyApplyFoldersToPathFromStringNotUrl()
         {
-
             var url = new UriTemplate("http://example.org{/folders*}{?filename}",true)
                 .AddParameters(new
                 {
@@ -277,8 +261,6 @@ namespace UriTemplateTests
         [Fact]
         public void UseArbitraryClassAsParameter()
         {
-
-
             var url = new UriTemplate("/{test}", true)
                 .AddParameters(new
                 {
@@ -288,7 +270,6 @@ namespace UriTemplateTests
 
             Assert.Equal("/something", url);
         }
-
 
         [Fact]
         public void AddMultipleParametersToLink()

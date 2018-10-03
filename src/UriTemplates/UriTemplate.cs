@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace Tavis.UriTemplates
@@ -20,8 +17,6 @@ namespace Tavis.UriTemplates
 #endif
     public class UriTemplate
         {
-
-
             private static Dictionary<char, OperatorInfo> _Operators = new Dictionary<char, OperatorInfo>() {
                                         {'\0', new OperatorInfo {Default = true, First = "", Seperator = ',', Named = false, IfEmpty = "",AllowReserved = false}},
                                         {'+', new OperatorInfo {Default = false, First = "", Seperator = ',', Named = false, IfEmpty = "",AllowReserved = true}},
@@ -283,7 +278,6 @@ namespace Tavis.UriTemplates
                     }
                     else
                     {
-
                         // Handle associative arrays
                         var dictionary = value as IDictionary<string, string>;
                         if (dictionary != null)
@@ -297,14 +291,16 @@ namespace Tavis.UriTemplates
                         else
                         {
                             // If above all fails, convert the object to string using the default object.ToString() implementation
-                            var stringValue = value.ToString();
-                            if (varSpec.OperatorInfo.Named)
+                            using (new WithCultureInfo(CultureInfo.InvariantCulture))
                             {
-                                result.AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                                var stringValue = value.ToString();
+                                if (varSpec.OperatorInfo.Named)
+                                {
+                                    result.AppendName(varname, varSpec.OperatorInfo, string.IsNullOrEmpty(stringValue));
+                                }
+                                result.AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
                             }
-                            result.AppendValue(stringValue, varSpec.PrefixLength, varSpec.OperatorInfo.AllowReserved);
                         }
-
                     }
 
                 }
@@ -468,7 +464,6 @@ namespace Tavis.UriTemplates
                 return sb.ToString();
             }
 
-
             private static string GetExpression(List<String> paramNames, string prefix = null)
             {
                 StringBuilder sb = new StringBuilder();
@@ -497,7 +492,6 @@ namespace Tavis.UriTemplates
                 default:
                     paramDelim = "[^/?&]+";
                     break;
-
             }
 
             foreach (var paramname in paramNames)
@@ -518,9 +512,5 @@ namespace Tavis.UriTemplates
 
                 return sb.ToString();
             }
-
-          
         }
-
-        
     }
