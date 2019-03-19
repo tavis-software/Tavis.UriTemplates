@@ -395,7 +395,7 @@ namespace Tavis.UriTemplates
                         var uriWithoutQuery = new Uri(uriString,
                             UriKind.Absolute);
                         
-                        var pathParameters = GetParameters(uriWithoutQuery) ?? new Dictionary<string, object>();
+                        var pathParameters = GetParameters(uriWithoutQuery) ?? new Dictionary<string, object>(_Parameters.Comparer);
 
                         Result result = ResolveResult();
 
