@@ -392,8 +392,7 @@ namespace Tavis.UriTemplates
                             uri = new Uri(_ComponentBaseUri, uri);
 
                         var uriString = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.Path | UriComponents.Fragment, UriFormat.UriEscaped);
-                        var uriWithoutQuery = new Uri(uriString,
-                            UriKind.Absolute);
+                        var uriWithoutQuery = new Uri(uriString, UriKind.Absolute);
                         
                         var pathParameters = GetParameters(uriWithoutQuery) ?? new Dictionary<string, object>(_Parameters.Comparer);
 
