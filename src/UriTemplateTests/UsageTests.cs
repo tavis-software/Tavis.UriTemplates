@@ -266,7 +266,7 @@ namespace UriTemplateTests
             
         }
 
-        //[Fact] Unit tests should not require internet access!!
+        [Fact(Skip = "Unit tests should not require internet access!!")] 
         public void PreserveReservedCharacterExpansion()
         {
             UriTemplate template = new UriTemplate("https://foo.com/?format={+format}");
