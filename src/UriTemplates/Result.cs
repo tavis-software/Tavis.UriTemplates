@@ -50,7 +50,7 @@ namespace Tavis.UriTemplates
                 }
                 AppendValue(item.ToString(), 0, op.AllowReserved);
 
-                _Result.Append(explode ? op.Seperator : ',');
+                _Result.Append(explode ? op.Separator : ',');
             }
             if (list.Count > 0)
             {
@@ -68,7 +68,7 @@ namespace Tavis.UriTemplates
 
                 if (explode)
                 {
-                    _Result.Append(op.Seperator);
+                    _Result.Append(op.Separator);
                 }
                 else
                 {
