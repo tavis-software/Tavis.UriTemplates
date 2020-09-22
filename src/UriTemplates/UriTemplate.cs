@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -409,7 +409,7 @@ namespace Tavis.UriTemplates
                     
                 });
 
-                return regex +"$";
+                return "(?<!.)\\" + regex +"$"; // add negative lookbehind to strictly match this regex
             }
 
         public static string CreateMatchingRegex2(string uriTemplate)
