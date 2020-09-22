@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Tavis.UriTemplates
@@ -36,7 +32,7 @@ namespace Tavis.UriTemplates
             private readonly string _template;
             private readonly Dictionary<string, object> _Parameters;
             private enum States { CopyingLiterals, ParsingExpression }
-            
+
 
             private readonly bool _resolvePartially;
 
@@ -191,8 +187,8 @@ namespace Tavis.UriTemplates
                             varSpec = new VarSpec(op);
                             if (success || !isFirst || _resolvePartially) varSpec.First = false;
                             if (!success && _resolvePartially) {result.Append(",") ; }
-                            break; 
-                        
+                            break;
+
 
                         default:
                             if (IsVarNameChar(currentChar))
@@ -406,7 +402,7 @@ namespace Tavis.UriTemplates
                         default:
                             return GetExpression(paramNames);
                     }
-                    
+
                 });
 
                 return "(?<!.)\\" + regex +"$"; // add negative lookbehind to strictly match this regex
@@ -456,7 +452,7 @@ namespace Tavis.UriTemplates
                     sb.Append("(?:");
                     sb.Append(paramname);
                     sb.Append("=");
-  
+
                     sb.Append("(?<");
                     sb.Append(paramname);
                     sb.Append(">");
@@ -519,8 +515,8 @@ namespace Tavis.UriTemplates
                 return sb.ToString();
             }
 
-          
+
         }
 
-        
+
     }
