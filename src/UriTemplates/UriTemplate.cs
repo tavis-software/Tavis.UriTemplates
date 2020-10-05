@@ -405,7 +405,7 @@ namespace Tavis.UriTemplates
 
                 });
 
-                return "(?<!.)\\" + regex +"$"; // add negative lookbehind to strictly match this regex
+                return "(?<!.)\\" + regex + "$"; // add negative lookbehind to strictly match this regex
             }
 
         public static string CreateMatchingRegex2(string uriTemplate)

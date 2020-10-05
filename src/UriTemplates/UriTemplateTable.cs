@@ -8,7 +8,7 @@ namespace Tavis.UriTemplates
     public class UriTemplateTable
     {
         private Dictionary<string,UriTemplate> _Templates =  new Dictionary<string,UriTemplate>();
-        
+
         public void Add(string key, UriTemplate template)
         {
             _Templates.Add(key,template);
@@ -16,9 +16,20 @@ namespace Tavis.UriTemplates
 
         public TemplateMatch Match(Uri url)
         {
-            foreach (var template in _Templates )
+            if (url == null)
             {
-                var parameters = template.Value.GetParameters(url);
+                throw new ArgumentNullException(nameof(url), "Value cannot be null.");
+            }
+
+            Uri absolutePath = url;
+            if (url.IsAbsoluteUri)
+            {
+                absolutePath = new Uri(url.AbsolutePath, UriKind.Relative);
+            }
+
+            foreach (var template in _Templates)
+            {
+                var parameters = template.Value.GetParameters(absolutePath);
                 if (parameters != null)
                 {
                     return new TemplateMatch() { Key = template.Key, Parameters = parameters, Template = template.Value };

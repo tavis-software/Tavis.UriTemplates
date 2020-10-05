@@ -18,7 +18,7 @@ namespace UriTemplateTests
         [Theory,
         InlineData("/","root"),
         InlineData("/baz/fod/burg",""),
-        InlineData("/baz/kit", "kit"),
+        InlineData("http://www.example.com/baz/kit", "kit"),
         InlineData("/baz/fod", "baz"),
         InlineData("/baz/fod/blob", "blob"),
         InlineData("/glah/flid/blob", "goo"),
@@ -36,6 +36,7 @@ namespace UriTemplateTests
             table.Add("set", new UriTemplate("/settings/{id}"));
             table.Add("org", new UriTemplate("/organization/{id}/settings/iteminsights"));
 
+            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
 
             var result = table.Match(new Uri(url, UriKind.RelativeOrAbsolute));
 
