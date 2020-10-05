@@ -18,10 +18,12 @@ namespace UriTemplateTests
         [Theory,
         InlineData("/","root"),
         InlineData("/baz/fod/burg",""),
-        InlineData("/baz/kit", "kit"),
+        InlineData("http://www.example.com/baz/kit", "kit"),
         InlineData("/baz/fod", "baz"),
         InlineData("/baz/fod/blob", "blob"),
-        InlineData("/glah/flid/blob", "goo")]
+        InlineData("/glah/flid/blob", "goo"),
+        InlineData("/settings/{id}", "set"),
+        InlineData("/organization/{id}/settings/iteminsights", "org")]
         public void FindPathTemplates(string url, string key)
         {
             var table = new UriTemplateTable();  // Shorter paths and literal path segments should be added to the table first.
@@ -31,7 +33,10 @@ namespace UriTemplateTests
             table.Add("baz", new UriTemplate("/baz/{bar}"));
             table.Add("blob", new UriTemplate("/baz/{bar}/blob"));
             table.Add("goo", new UriTemplate("/{goo}/{bar}/blob"));
+            table.Add("set", new UriTemplate("/settings/{id}"));
+            table.Add("org", new UriTemplate("/organization/{id}/settings/iteminsights"));
 
+            var uri = new Uri(url, UriKind.RelativeOrAbsolute);
 
             var result = table.Match(new Uri(url, UriKind.RelativeOrAbsolute));
 
