@@ -275,11 +275,7 @@ namespace UriTemplateTests
             var result = template.Resolve();
 
             Assert.Equal("https://foo.com/?format=application/vnd.foo+xml", result);
-
-            var httpClient = new HttpClient();
-
-            var response = httpClient.GetAsync("http://yahoo.com/foo%2Fbar").Result;
-
+            
         }
 
         [Fact]
