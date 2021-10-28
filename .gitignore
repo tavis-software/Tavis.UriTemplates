@@ -42,3 +42,4 @@ artifacts
 publish-tavis*.ps1
 project.lock.json
 .vs/
+.idea
