@@ -4,6 +4,7 @@ using System.Globalization;
 
 namespace Tavis.UriTemplates
 {
+#if TYPE_CONVERTER
     /// <summary>
     /// Converts to <see cref="UriTemplate"/> instances from other representations.
     /// </summary>
@@ -39,4 +40,5 @@ namespace Tavis.UriTemplates
             throw (NotSupportedException)GetConvertFromException(value);
         }
     }
+#endif
 }

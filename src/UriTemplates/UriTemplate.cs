@@ -23,14 +23,14 @@ namespace Tavis.UriTemplates
 
 
             private static Dictionary<char, OperatorInfo> _Operators = new Dictionary<char, OperatorInfo>() {
-                                        {'\0', new OperatorInfo {Default = true, First = "", Seperator = ',', Named = false, IfEmpty = "",AllowReserved = false}},
-                                        {'+', new OperatorInfo {Default = false, First = "", Seperator = ',', Named = false, IfEmpty = "",AllowReserved = true}},
-                                        {'.', new OperatorInfo {Default = false, First = ".", Seperator = '.', Named = false, IfEmpty = "",AllowReserved = false}},
-                                        {'/', new OperatorInfo {Default = false, First = "/", Seperator = '/', Named = false, IfEmpty = "",AllowReserved = false}},
-                                        {';', new OperatorInfo {Default = false, First = ";", Seperator = ';', Named = true, IfEmpty = "",AllowReserved = false}},
-                                        {'?', new OperatorInfo {Default = false, First = "?", Seperator = '&', Named = true, IfEmpty = "=",AllowReserved = false}},
-                                        {'&', new OperatorInfo {Default = false, First = "&", Seperator = '&', Named = true, IfEmpty = "=",AllowReserved = false}},
-                                        {'#', new OperatorInfo {Default = false, First = "#", Seperator = ',', Named = false, IfEmpty = "",AllowReserved = true}}
+                                        {'\0', new OperatorInfo {Default = true, First = "", Separator = ',', Named = false, IfEmpty = "",AllowReserved = false}},
+                                        {'+', new OperatorInfo {Default = false, First = "", Separator = ',', Named = false, IfEmpty = "",AllowReserved = true}},
+                                        {'.', new OperatorInfo {Default = false, First = ".", Separator = '.', Named = false, IfEmpty = "",AllowReserved = false}},
+                                        {'/', new OperatorInfo {Default = false, First = "/", Separator = '/', Named = false, IfEmpty = "",AllowReserved = false}},
+                                        {';', new OperatorInfo {Default = false, First = ";", Separator = ';', Named = true, IfEmpty = "",AllowReserved = false}},
+                                        {'?', new OperatorInfo {Default = false, First = "?", Separator = '&', Named = true, IfEmpty = "=",AllowReserved = false}},
+                                        {'&', new OperatorInfo {Default = false, First = "&", Separator = '&', Named = true, IfEmpty = "=",AllowReserved = false}},
+                                        {'#', new OperatorInfo {Default = false, First = "#", Separator = ',', Named = false, IfEmpty = "",AllowReserved = true}}
                                         };
 
             private readonly string _template;
@@ -249,7 +249,7 @@ namespace Tavis.UriTemplates
                 }
                 else
                 {
-                    result.Append(varSpec.OperatorInfo.Seperator);
+                    result.Append(varSpec.OperatorInfo.Separator);
                 }
 
                 object value = _Parameters[varname];
@@ -352,33 +352,65 @@ namespace Tavis.UriTemplates
 
             private Regex _ParameterRegex = null;
 
-            public IDictionary<string,object> GetParameters(Uri uri)
+            private Uri _ComponentBaseUri = new Uri("https://localhost.com", UriKind.Absolute);
+
+            public IDictionary<string,object> GetParameters(Uri uri, QueryStringParameterOrder order = QueryStringParameterOrder.Strict)
             {
-                if (_ParameterRegex == null)
+                switch (order)
                 {
-                    var matchingRegex = CreateMatchingRegex(_template);
-                    lock (this)
+                    case QueryStringParameterOrder.Strict:
                     {
-                        _ParameterRegex = new Regex(matchingRegex);
-                    }
-                }
-
-                var match = _ParameterRegex.Match(uri.OriginalString);
-                var parameters = new Dictionary<string, object>();
-
-                for(int x = 1; x < match.Groups.Count; x ++)
-                {
-                    if (match.Groups[x].Success)
-                    {
-                        var paramName = _ParameterRegex.GroupNameFromNumber(x);
-                        if (!string.IsNullOrEmpty(paramName))
+                        if (_ParameterRegex == null)
                         {
-                            parameters.Add(paramName, Uri.UnescapeDataString(match.Groups[x].Value));
+                            var matchingRegex = CreateMatchingRegex(_template);
+                            lock (this)
+                            {
+                                _ParameterRegex = new Regex(matchingRegex);
+                            }
                         }
 
+                        var match = _ParameterRegex.Match(uri.OriginalString);
+                        var parameters = new Dictionary<string, object>();
+
+                        for (int x = 1; x < match.Groups.Count; x++)
+                        {
+                            if (match.Groups[x].Success)
+                            {
+                                var paramName = _ParameterRegex.GroupNameFromNumber(x);
+                                if (!string.IsNullOrEmpty(paramName))
+                                {
+                                    parameters.Add(paramName, Uri.UnescapeDataString(match.Groups[x].Value));
+                                }
+
+                            }
+                        }
+                        return match.Success ? parameters : null;
                     }
+                    case QueryStringParameterOrder.Any:
+                    {
+                        if(!uri.IsAbsoluteUri)
+                            uri = new Uri(_ComponentBaseUri, uri);
+
+                        var uriString = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.Path | UriComponents.Fragment, UriFormat.UriEscaped);
+                        var uriWithoutQuery = new Uri(uriString, UriKind.Absolute);
+                        
+                        var pathParameters = GetParameters(uriWithoutQuery) ?? new Dictionary<string, object>(_Parameters.Comparer);
+
+                        Result result = ResolveResult();
+
+                        var parameterNames = result.ParameterNames;
+                        foreach (var parameter in uri.GetQueryStringParameters())
+                        {
+                            if (!parameterNames.Contains(parameter.Key))
+                                continue;
+                            pathParameters.Add(parameter.Key, parameter.Value);
+                        }
+
+                        return pathParameters.Count == 0 ? null : pathParameters;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(order), order, null);
                 }
-                return match.Success ? parameters : null;
             }
 
             public static string CreateMatchingRegex(string uriTemplate)

@@ -21,7 +21,7 @@ namespace Tavis.UriTemplates
             if (parametersObject != null)
             {
                 IEnumerable<PropertyInfo> properties;
-#if DOTNET5_1
+#if NETSTANDARD1_0
                 var type = parametersObject.GetType().GetTypeInfo();
                 properties = type.DeclaredProperties.Where(p=> p.CanRead);
 #else

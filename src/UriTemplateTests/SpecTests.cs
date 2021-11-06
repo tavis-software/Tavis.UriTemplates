@@ -12,7 +12,7 @@ namespace UriTemplateTests
     public class UriTemplateTests2
     {
 
-        [Theory, MemberData("SpecSamples")]
+        [Theory, MemberData(nameof(SpecSamples))]
         public void SpecSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -25,11 +25,11 @@ namespace UriTemplateTests
             string result = null;
             result = uriTemplate.Resolve();
 
-            Assert.True(results.Contains(result));
+            Assert.Contains(results, x => x == result);
         }
 
 
-        [Theory, MemberData("ExtendedSamples")]
+        [Theory, MemberData(nameof(ExtendedSamples))]
         public void ExtendedSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -58,13 +58,13 @@ namespace UriTemplateTests
             }
             else
             {
-                Assert.True(results.Contains(result));
+                Assert.Contains(results, x => x == result);
             }
 
         }
 
 
-        // Disabled for the moment. [Theory, PropertyData("FailureSamples")]
+        [Theory(Skip = "Disabled for the moment."), MemberData(nameof(FailureSamples))]
         public void FailureSamplesTest(string template, string[] results, TestSet.TestCase testCase)
         {
             var uriTemplate = new UriTemplate(template);
@@ -87,7 +87,14 @@ namespace UriTemplateTests
                 aex = ex;
             }
 
-            Assert.NotNull(aex);
+            if (results[0] == "False")
+            {
+                Assert.NotNull(aex);
+            }
+            else
+            {
+                Assert.Contains(results, x => x == result);
+            }
 
 
         }
