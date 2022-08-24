@@ -1,10 +1,13 @@
 # Uri Templates #
 
+##2.0.0
+- [Breaking] Updated Target Framework Moniker to `netstandard2.0` and drops `net35`, `net40`, `net45` and `netstandard1.0`.
+
 ##1.1.2
 - Added Type converter support 
 
 ##1.1.1
-- Fixed bug parsing query paranmeter with comma delimited values
+- Fixed bug parsing query parameter with comma delimited values
 
 
 ##1.1.0
@@ -30,7 +33,7 @@
 
 ##0.6.3
 
-- Added ToString() overload to allow retreiving unresolved template
+- Added ToString() overload to allow retrieving unresolved template
 
 ##0.6.2
 
