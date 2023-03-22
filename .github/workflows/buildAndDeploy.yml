@@ -21,7 +21,7 @@ jobs:
           submodules: true
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2.1.0
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 6.0.x
 
@@ -54,7 +54,7 @@ jobs:
             submodules: true
 
         - name: Setup .NET
-          uses: actions/setup-dotnet@v2.1.0
+          uses: actions/setup-dotnet@v3.0.3
           with:
             dotnet-version: 6.0.x        
 
@@ -77,7 +77,7 @@ jobs:
     needs: [build]
     steps:
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2.1.0
+        uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: 6.0.x
           
