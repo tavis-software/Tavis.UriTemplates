@@ -38,7 +38,7 @@ jobs:
         run: dotnet pack ${{ env.solutionName }} /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg --no-build --output ${{ env.outputFolder }} -c Release
 
       - name: Upload Nuget Package and Symbols
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: drop
           path: |
