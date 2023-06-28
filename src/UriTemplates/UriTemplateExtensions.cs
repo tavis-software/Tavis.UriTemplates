@@ -84,6 +84,6 @@ namespace Tavis.UriTemplates
             return parameters;
         }
 
-       
+
     }
 }

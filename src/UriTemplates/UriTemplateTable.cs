@@ -7,16 +7,16 @@ namespace Tavis.UriTemplates
 {
     public class UriTemplateTable
     {
-        private Dictionary<string,UriTemplate> _Templates =  new Dictionary<string,UriTemplate>();
-        
+        private Dictionary<string, UriTemplate> _Templates = new Dictionary<string, UriTemplate>();
+
         public void Add(string key, UriTemplate template)
         {
-            _Templates.Add(key,template);
+            _Templates.Add(key, template);
         }
 
         public TemplateMatch Match(Uri url, QueryStringParameterOrder order = QueryStringParameterOrder.Strict)
         {
-            foreach (var template in _Templates )
+            foreach (var template in _Templates)
             {
                 var parameters = template.Value.GetParameters(url, order);
                 if (parameters != null)
@@ -36,7 +36,8 @@ namespace Tavis.UriTemplates
                 {
                     return value;
                 }
-                else {
+                else
+                {
                     return null;
                 }
             }
@@ -47,7 +48,7 @@ namespace Tavis.UriTemplates
     public class TemplateMatch
     {
         public string Key { get; set; }
-        public UriTemplate Template {get;set;}
-        public IDictionary<string,object> Parameters {get;set;}
+        public UriTemplate Template { get; set; }
+        public IDictionary<string, object> Parameters { get; set; }
     }
 }
