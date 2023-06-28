@@ -11,7 +11,7 @@ namespace UriTemplateTests
 {
     public class ParameterMatchingTests
     {
-        
+
 
         [Fact]
         public void MatchUriToTemplate()
@@ -22,7 +22,7 @@ namespace UriTemplateTests
 
             var x = UriTemplate.CreateMatchingRegex(sTemplate);
 
-            var match = Regex.IsMatch(uri.AbsoluteUri,x);
+            var match = Regex.IsMatch(uri.AbsoluteUri, x);
             Assert.True(match);
         }
 
@@ -38,7 +38,7 @@ namespace UriTemplateTests
 
             var match = regex.Match(uri.AbsoluteUri);
 
-            Assert.Equal("foo",match.Groups["p1"].Value);
+            Assert.Equal("foo", match.Groups["p1"].Value);
             Assert.Equal("bar", match.Groups["p2"].Value);
         }
 
@@ -170,14 +170,14 @@ namespace UriTemplateTests
         public void TestUrlWithQuestionMarkAsFirstCharacter()
         {
 
-            var parameters = new UriTemplate("?hash={hash}").GetParameters(new Uri("http://localhost:5000/glimpse/metadata?hash=123"));;
+            var parameters = new UriTemplate("?hash={hash}").GetParameters(new Uri("http://localhost:5000/glimpse/metadata?hash=123")); ;
 
             Assert.Equal(1, parameters.Count);
             Assert.Equal("123", parameters["hash"]);
 
         }
 
-        
+
 
         [Fact]
         public void TestExactParameterCount()
@@ -202,7 +202,7 @@ namespace UriTemplateTests
             for (int i = 0; i < 100000; i++)
             {
                 var parameters = template.GetParameters(uri);
-                
+
             }
 
 
@@ -289,7 +289,7 @@ namespace UriTemplateTests
             Assert.Equal("yuck", parameters["bar"]);
             Assert.Equal("yob", parameters["baz"]);
         }
-        
+
 
     }
 }
