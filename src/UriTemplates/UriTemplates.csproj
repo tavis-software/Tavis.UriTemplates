@@ -15,6 +15,8 @@
     <RepositoryType>git</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <RepositoryUrl>https://github.com/tavis-software/Tavis.UriTemplates</RepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <AssemblyOriginatorKeyFile>../../UriTemplateKey.snk</AssemblyOriginatorKeyFile>
