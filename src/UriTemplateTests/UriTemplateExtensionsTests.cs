@@ -28,7 +28,7 @@ namespace UriTemplateTests
                 .AddParameter("activeflag", "true")
                 .Resolve();
 
-            Assert.Equal("http://example.org/customers?active=true",url); 
+            Assert.Equal("http://example.org/customers?active=true", url);
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace UriTemplateTests
         public void ApplyParametersObjectToPathSegment()
         {
             var url = new UriTemplate("http://example.org/foo/{bar}/baz")
-                .AddParameters(new {bar = "yo"})
+                .AddParameters(new { bar = "yo" })
                 .Resolve();
 
             Assert.Equal("http://example.org/foo/yo/baz", url);
@@ -132,8 +132,8 @@ namespace UriTemplateTests
             var url = new UriTemplate("http://example.org/customers{?ids,order}")
                 .AddParameters(new
                 {
-                    order = "up", 
-                    ids = new List<string> {"21", "75", "21"}
+                    order = "up",
+                    ids = new List<string> { "21", "75", "21" }
                 }).Resolve();
 
             Assert.Equal("http://example.org/customers?ids=21,75,21&order=up", url);
@@ -146,7 +146,7 @@ namespace UriTemplateTests
                 .AddParameters(new
                 {
                     order = "up",
-                    ids = new[] {21, 75, 21}
+                    ids = new[] { 21, 75, 21 }
                 })
                 .Resolve();
 
@@ -173,7 +173,7 @@ namespace UriTemplateTests
             var url = new UriTemplate("http://example.org/files{/folders*}{?filename}")
                 .AddParameters(new
                 {
-                    folders = new[] {"customer", "project"},
+                    folders = new[] { "customer", "project" },
                     filename = "proposal.pdf"
                 })
                 .Resolve();
@@ -234,7 +234,7 @@ namespace UriTemplateTests
         public void ReplaceBaseAddressButNotId()
         {
 
-            var url = new UriTemplate("{+baseUrl}api/customer/{id}",resolvePartially:true)
+            var url = new UriTemplate("{+baseUrl}api/customer/{id}", resolvePartially: true)
                 .AddParameters(new
                 {
                     baseUrl = "http://example.org/"
@@ -248,7 +248,7 @@ namespace UriTemplateTests
         public void PartiallyParametersFromAnObjectFromInvalidUrl()
         {
 
-            var url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}",resolvePartially:true)
+            var url = new UriTemplate("http://{environment}.example.org/{version}/customers{?active,country}", resolvePartially: true)
             .AddParameters(new
             {
                 environment = "dev",
@@ -264,7 +264,7 @@ namespace UriTemplateTests
         public void PartiallyApplyFoldersToPathFromStringNotUrl()
         {
 
-            var url = new UriTemplate("http://example.org{/folders*}{?filename}",true)
+            var url = new UriTemplate("http://example.org{/folders*}{?filename}", true)
                 .AddParameters(new
                 {
                     filename = "proposal.pdf"

@@ -8,7 +8,7 @@ namespace Tavis.UriTemplates
     public class Result
     {
         public bool ErrorDetected { get; set; }
-        public List<string> ParameterNames {get;set;}
+        public List<string> ParameterNames { get; set; }
         private const string _UriReservedSymbols = ":/?#[]@!$&'()*+,;=";
         private const string _UriUnreservedSymbols = "-._~";
 
@@ -96,7 +96,7 @@ namespace Tavis.UriTemplates
 
         }
 
-            
+
         private static string Encode(string p, bool allowReserved)
         {
 
@@ -112,7 +112,7 @@ namespace Tavis.UriTemplates
                 }
                 else
                 {
-                    var bytes = Encoding.UTF8.GetBytes(new []{c});
+                    var bytes = Encoding.UTF8.GetBytes(new[] { c });
                     foreach (var abyte in bytes)
                     {
                         result.Append(HexEscape(abyte));
@@ -126,7 +126,7 @@ namespace Tavis.UriTemplates
 
         }
 
-         public static string HexEscape(byte i)
+        public static string HexEscape(byte i)
         {
             var esc = new char[3];
             esc[0] = '%';
@@ -134,14 +134,15 @@ namespace Tavis.UriTemplates
             esc[2] = HexDigits[(i & 15)];
             return new string(esc);
         }
-        public static string HexEscape(char c) {
+        public static string HexEscape(char c)
+        {
             var esc = new char[3];
             esc[0] = '%';
-            esc[1] = HexDigits[(((int) c & 240) >> 4)];
-            esc[2] = HexDigits[((int) c & 15)];
+            esc[1] = HexDigits[(((int)c & 240) >> 4)];
+            esc[2] = HexDigits[((int)c & 15)];
             return new string(esc);
         }
-        private static readonly char[] HexDigits = new char[] {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        private static readonly char[] HexDigits = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 
 
 

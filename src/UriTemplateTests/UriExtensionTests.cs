@@ -28,7 +28,7 @@ namespace UriTemplateTests
             var target = new Uri("http://example/customer?view=False&foo=bar");
 
             var template = target.MakeTemplate();
-            template.SetParameter("view",true);
+            template.SetParameter("view", true);
 
             Assert.Equal("http://example/customer?view=True&foo=bar", template.Resolve());
         }
@@ -78,10 +78,10 @@ namespace UriTemplateTests
 
 
             var template = target.MakeTemplate(target.GetQueryStringParameters()
-                .Union(new Dictionary<string, object> {{"context", "detail"}})
-                .ToDictionary(k=> k.Key, v=> v.Value));
+                .Union(new Dictionary<string, object> { { "context", "detail" } })
+                .ToDictionary(k => k.Key, v => v.Value));
             template.AddParameter("id", 99);
-            
+
             Assert.Equal("http://example/customer/99?view=true&context=detail", template.Resolve());
         }
     }
