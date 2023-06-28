@@ -11,7 +11,9 @@
             For full release notes see https://github.com/tavis-software/Tavis.UriTemplates/blob/main/CHANGELOG.md
             ]]></PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/tavis-software/Tavis.UriTemplates</PackageProjectUrl>
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <SignAssembly>true</SignAssembly>
     <RepositoryUrl>https://github.com/tavis-software/Tavis.UriTemplates</RepositoryUrl>
@@ -37,4 +39,8 @@
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../LICENSE" Pack="true" PackagePath="" />
+    <None Include="../../README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>
