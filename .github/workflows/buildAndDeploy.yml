@@ -3,9 +3,9 @@ name: Build and Test
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
         run: dotnet restore ${{ env.solutionName }}
 
       - name: Check formatting
-        run: dotnet format --check --verbosity diagnostic
+        run: dotnet format --verify-no-changes --verbosity diagnostic
 
       - name: Build
         run: dotnet build ${{ env.solutionName }} --no-restore -c Release
@@ -49,7 +49,7 @@ jobs:
             ${{ env.outputFolder }}/*.snupkg
 
   deploy:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     environment:
       name: production
     runs-on: ubuntu-latest
