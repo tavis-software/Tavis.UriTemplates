@@ -28,6 +28,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ env.solutionName }}
 
+      - name: Check formatting
+        run: dotnet format --check --verbosity diagnostic
+
       - name: Build
         run: dotnet build ${{ env.solutionName }} --no-restore -c Release
 
