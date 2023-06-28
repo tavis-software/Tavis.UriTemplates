@@ -1,5 +1,6 @@
 # Uri Templates # 
-![Build Status](https://ci.appveyor.com/api/projects/status/nol9sb59uvxvgt8l?svg=true) [![NuGet](https://img.shields.io/nuget/v/Tavis.UriTemplates.svg?label=NuGet)](https://www.nuget.org/packages/Tavis.UriTemplates/)
+
+[![Build and deploy](https://github.com/microsoft/kiota/actions/workflows/buildAndDeploy.yml/badge.svg)](https://github.com/microsoft/kiota/actions/workflows/buildAndDeploy.yml) [![CodeQL](https://github.com/microsoft/kiota/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/microsoft/kiota/actions/workflows/codeql-analysis.yml) [![NuGet](https://img.shields.io/nuget/v/Tavis.UriTemplates.svg?label=NuGet)](https://www.nuget.org/packages/Tavis.UriTemplates/)
 
 .NET implementation of the [URI Template Spec RFC6570](http://tools.ietf.org/html/rfc6570). 
 
