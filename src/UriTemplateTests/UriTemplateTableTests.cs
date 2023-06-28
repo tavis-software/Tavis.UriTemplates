@@ -88,7 +88,7 @@ namespace UriTemplateTests
     ]
         public void FindTemplatesWithQueryStrings(string url, string key)
         {
-            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
+            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictive ones
             table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
             table.Add("fooxy2", new UriTemplate("/foo?x={x}{&y}"));
             table.Add("fooxy4", new UriTemplate("/foo?x={x}{&z}"));
@@ -111,7 +111,7 @@ namespace UriTemplateTests
         [Fact]
         public void FindTemplatesWithArrayQueryParameters()
         {
-            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
+            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictive ones
             table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
             table.Add("fooxy2", new UriTemplate("/foo?x={x}{&y}"));
             table.Add("fooxy4", new UriTemplate("/foo?x={x}{&z}"));
@@ -127,15 +127,14 @@ namespace UriTemplateTests
 
 
         [Fact]
-        public void MatchTemplateWithDifferentOrderOfParameters()
+        public void MatchTemplateWithDifferentOrderOfQueryStringParameters()
         {
-            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictuve ones
+            var table = new UriTemplateTable();   // More restrictive templates should have priority over less restrictive ones
             table.Add("fooxy3", new UriTemplate("/foo?x={x}&y={y}"));
 
-            var result = table.Match(new Uri("/foo?y=a&x=b", UriKind.RelativeOrAbsolute));
+            var result = table.Match(new Uri("/foo?y=a&x=b", UriKind.RelativeOrAbsolute), QueryStringParameterOrder.Any);
 
             Assert.Equal("fooxy3", result.Key);
-
         }
 
     }

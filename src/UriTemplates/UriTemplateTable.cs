@@ -14,11 +14,11 @@ namespace Tavis.UriTemplates
             _Templates.Add(key,template);
         }
 
-        public TemplateMatch Match(Uri url)
+        public TemplateMatch Match(Uri url, QueryStringParameterOrder order = QueryStringParameterOrder.Strict)
         {
             foreach (var template in _Templates )
             {
-                var parameters = template.Value.GetParameters(url);
+                var parameters = template.Value.GetParameters(url, order);
                 if (parameters != null)
                 {
                     return new TemplateMatch() { Key = template.Key, Parameters = parameters, Template = template.Value };
