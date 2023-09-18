@@ -113,7 +113,7 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
-            Assert.Equal(1, parameters.Count);
+            Assert.Single(parameters);
             Assert.Equal("45,23", parameters["blur"]);
 
         }
@@ -172,7 +172,7 @@ namespace UriTemplateTests
 
             var parameters = new UriTemplate("?hash={hash}").GetParameters(new Uri("http://localhost:5000/glimpse/metadata?hash=123")); ;
 
-            Assert.Equal(1, parameters.Count);
+            Assert.Single(parameters);
             Assert.Equal("123", parameters["hash"]);
 
         }
@@ -188,7 +188,7 @@ namespace UriTemplateTests
 
             var parameters = template.GetParameters(uri);
 
-            Assert.Equal(1, parameters.Count);
+            Assert.Single(parameters);
 
         }
 
