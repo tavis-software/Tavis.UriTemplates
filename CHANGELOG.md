@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Fixed lower normalization of query parameters. [#62](https://github.com/tavis-software/Tavis.UriTemplates/issues/62)
+
 ## [2.0.0]
 
 - [Breaking] Updated Target Framework Moniker to `netstandard2.0` and drops `net35`, `net40`, `net45` and `netstandard1.0`.
