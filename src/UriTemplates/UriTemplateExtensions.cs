@@ -72,18 +72,22 @@ namespace Tavis.UriTemplates
         public static Dictionary<string, object> GetQueryStringParameters(this Uri target)
         {
             Uri uri = target;
-            var parameters = new Dictionary<string, object>();
+            var parameters = new List<KeyValuePair<string, object>>();
 
             var reg = new Regex(@"([-A-Za-z0-9._~]*)=([^&]*)&?");		// Unreserved characters: http://tools.ietf.org/html/rfc3986#section-2.3
             foreach (Match m in reg.Matches(uri.Query))
             {
                 string key = m.Groups[1].Value.ToLowerInvariant();
-                string value = m.Groups[2].Value;
-                parameters.Add(key, value);
+                string values = m.Groups[2].Value;
+
+                // Avoid encoding ',' in query string parameters
+                foreach(var value in values.Split(','))
+                {
+                    parameters.Add(new KeyValuePair<string, object>(key, value));
+                }
             }
-            return parameters;
+
+            return parameters.GroupBy(x => x.Key).ToDictionary(x => x.Key, x => (object) x.Select(a => a.Value).ToArray());
         }
-
-
     }
 }
