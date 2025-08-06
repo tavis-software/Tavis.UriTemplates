@@ -84,5 +84,23 @@ namespace UriTemplateTests
 
             Assert.Equal("http://example/customer/99?view=true&context=detail", template.Resolve());
         }
+
+        [Fact]
+        public void Duplicate_query_string_key_should_parse()
+        {
+            var target = new Uri("http://example/customer?color=blue&color=red");
+            var template = target.MakeTemplate();
+
+            Assert.Equal("http://example/customer?color=blue,red", template.Resolve());
+        }
+
+        [Fact]
+        public void Query_string_parameter_with_multiple_values_should_parse()
+        {
+            var target = new Uri("http://example/customer?color=blue,red");
+            var template = target.MakeTemplate();
+
+            Assert.Equal("http://example/customer?color=blue,red", template.Resolve());
+        }
     }
 }
