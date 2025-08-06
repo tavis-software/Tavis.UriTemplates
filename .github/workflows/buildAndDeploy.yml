@@ -61,7 +61,7 @@ jobs:
           dotnet-version: 6.0.x
           
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: drop
       
