@@ -77,7 +77,7 @@ namespace Tavis.UriTemplates
             var reg = new Regex(@"([-A-Za-z0-9._~]*)=([^&]*)&?");		// Unreserved characters: http://tools.ietf.org/html/rfc3986#section-2.3
             foreach (Match m in reg.Matches(uri.Query))
             {
-                string key = m.Groups[1].Value.ToLowerInvariant();
+                string key = m.Groups[1].Value;                         //RFC-3986 section 6.2.2.1 https://tools.ietf.org/html/rfc3986#page-11
                 string value = m.Groups[2].Value;
                 parameters.Add(key, value);
             }
