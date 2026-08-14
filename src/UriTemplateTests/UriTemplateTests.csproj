@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="..\..\lib\uritemplate-test\extended-tests.json" Link="extended-tests.json" />
-    <EmbeddedResource Include="..\..\lib\uritemplate-test\negative-tests.json" Link="negative-tests.json" />
-    <EmbeddedResource Include="..\..\lib\uritemplate-test\spec-examples-by-section.json" Link="spec-examples-by-section.json" />
-    <EmbeddedResource Include="..\..\lib\uritemplate-test\spec-examples.json" Link="spec-examples.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.0.2" />
