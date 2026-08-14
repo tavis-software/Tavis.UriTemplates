@@ -1,20 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+#if TYPE_CONVERTER
+using System.ComponentModel;
+#endif
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Tavis.UriTemplates
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-#if TYPE_CONVERTER
-    using System.ComponentModel;
-#endif
-    using System.Linq;
-    using System.Text;
-
 #if TYPE_CONVERTER
     [TypeConverter(typeof(UriTemplateConverter))]
 #endif
