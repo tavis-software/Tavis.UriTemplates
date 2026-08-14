@@ -15,18 +15,17 @@ namespace Tavis.UriTemplates
 #endif
     public class UriTemplate
     {
-
-
-        private static Dictionary<char, OperatorInfo> _Operators = new Dictionary<char, OperatorInfo>() {
-                                        {'\0', new OperatorInfo {Default = true, First = "", Separator = ',', Named = false, IfEmpty = "",AllowReserved = false}},
-                                        {'+', new OperatorInfo {Default = false, First = "", Separator = ',', Named = false, IfEmpty = "",AllowReserved = true}},
-                                        {'.', new OperatorInfo {Default = false, First = ".", Separator = '.', Named = false, IfEmpty = "",AllowReserved = false}},
-                                        {'/', new OperatorInfo {Default = false, First = "/", Separator = '/', Named = false, IfEmpty = "",AllowReserved = false}},
-                                        {';', new OperatorInfo {Default = false, First = ";", Separator = ';', Named = true, IfEmpty = "",AllowReserved = false}},
-                                        {'?', new OperatorInfo {Default = false, First = "?", Separator = '&', Named = true, IfEmpty = "=",AllowReserved = false}},
-                                        {'&', new OperatorInfo {Default = false, First = "&", Separator = '&', Named = true, IfEmpty = "=",AllowReserved = false}},
-                                        {'#', new OperatorInfo {Default = false, First = "#", Separator = ',', Named = false, IfEmpty = "",AllowReserved = true}}
-                                        };
+        private static class Operators
+        {
+            public static readonly OperatorInfo Default =   new OperatorInfo {Default = true, First = "", Separator = ',', Named = false, IfEmpty = "",AllowReserved = false};
+            public static readonly OperatorInfo Plus =      new OperatorInfo {Default = false, First = "", Separator = ',', Named = false, IfEmpty = "",AllowReserved = true};
+            public static readonly OperatorInfo Dot =       new OperatorInfo {Default = false, First = ".", Separator = '.', Named = false, IfEmpty = "",AllowReserved = false};
+            public static readonly OperatorInfo Slash =     new OperatorInfo {Default = false, First = "/", Separator = '/', Named = false, IfEmpty = "",AllowReserved = false};
+            public static readonly OperatorInfo Semicolon = new OperatorInfo {Default = false, First = ";", Separator = ';', Named = true, IfEmpty = "",AllowReserved = false};
+            public static readonly OperatorInfo Query =     new OperatorInfo {Default = false, First = "?", Separator = '&', Named = true, IfEmpty = "=",AllowReserved = false};
+            public static readonly OperatorInfo Ampersand = new OperatorInfo {Default = false, First = "&", Separator = '&', Named = true, IfEmpty = "=",AllowReserved = false};
+            public static readonly OperatorInfo Number =    new OperatorInfo {Default = false, First = "#", Separator = ',', Named = false, IfEmpty = "",AllowReserved = true};
+        }
 
         private readonly string _template;
         private readonly Dictionary<string, object> _Parameters;
@@ -317,25 +316,17 @@ namespace Tavis.UriTemplates
 
         private static OperatorInfo GetOperator(char operatorIndicator)
         {
-            OperatorInfo op;
             switch (operatorIndicator)
             {
-
-                case '+':
-                case ';':
-                case '/':
-                case '#':
-                case '&':
-                case '?':
-                case '.':
-                    op = _Operators[operatorIndicator];
-                    break;
-
-                default:
-                    op = _Operators['\0'];
-                    break;
+                case '+': return Operators.Plus;
+                case '.': return Operators.Dot;
+                case '/': return Operators.Slash;
+                case ';': return Operators.Semicolon;
+                case '?': return Operators.Query;
+                case '&': return Operators.Ampersand;
+                case '#': return Operators.Number;
+                default:  return Operators.Default;
             }
-            return op;
         }
 
         private const string varname = "[a-zA-Z0-9_]*";
